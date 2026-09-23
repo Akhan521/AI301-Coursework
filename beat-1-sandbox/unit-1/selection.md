@@ -109,7 +109,9 @@ Quote source text directly in each field below. Paraphrase does not satisfy them
 14. `agreement: 20/20 scored items  (bar: 18/20: PASS)` (full run, confirms the rubric was unaffected by the wording-only swap)
 15. `agreement: 3/3 scored items` (`--only issue-20,issue-01,issue-04`, after softening the unconfirmed-feature-request clause)
 16. `agreement: 20/20 scored items  (bar: 18/20: PASS)` (full run)
-17. `agreement: 20/20 scored items  (bar: 18/20: PASS)` (final confirming run, saved to `eval-run.txt`)
+17. `agreement: 20/20 scored items  (bar: 18/20: PASS)` (confirming run for the original submission, saved to `eval-run.txt`)
+18. `agreement: 20/20 scored items  (bar: 18/20: PASS)` (`--only`, all 20 scored issues, after splitting `bounded-scope` into six focused checks — `single-bounded-goal`, `no-unresolved-debate`, `not-core-internals`, `not-support-question`, `no-abandoned-history`, `feature-request-confirmed` — following code-review feedback that a single check was carrying too many independent failure modes)
+19. `agreement: 20/20 scored items  (bar: 18/20: PASS)` (final confirming run after the split, saved to `eval-run.txt`)
 
 **Issue analysis**
 

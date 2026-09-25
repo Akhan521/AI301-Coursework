@@ -29,10 +29,69 @@ Hi! I'd like to work on this one. I'll reproduce the `text: None` crash on curre
 
 **Reproduction comment**
 
-[Link to the comment where you posted your reproduction. It must record the environment
-(OS, relevant versions, code state), steps a stranger could follow, and what you observed.
-**Then paste the text of that comment underneath the link** — the pasted text is what this
-field is graded on, so copy across what you actually posted.]
+https://github.com/codepath/pathreview-ai301-fa26-s1/issues/60#issuecomment-5840813911
+
+````markdown
+## Reproduction (macOS)
+
+Also reproduces on macOS with Python 3.11 (the version CI pins); the earlier report above was on Windows with Python 3.14. I also ran the test that's xfailed for this issue.
+
+**Environment**
+- macOS 26.6.2 (arm64)
+- `main` @ `f89c06fc3ff292df2a04a39ac51319d32a76b779`
+- Python 3.11.15
+- Installed with `.venv/bin/pip install -e ".[dev]"` in a Python 3.11 venv (structlog 26.1.0, pytest 9.1.1); Docker, migrations, and the frontend skipped, since `check()` doesn't touch them.
+
+**To reproduce**
+
+1. Clone, check out `main` at the commit above, and install as above.
+2. Run the snippet from the issue:
+
+```
+$ .venv/bin/python -c "from rag.evaluator.faithfulness_checker import FaithfulnessChecker
+FaithfulnessChecker().check('Knows Python.', [{'text': None}])"
+Traceback (most recent call last):
+  File "<string>", line 2, in <module>
+  File ".../rag/evaluator/faithfulness_checker.py", line 38, in check
+    context_text = " ".join([chunk.get("text", "") for chunk in context_chunks])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: sequence item 0: expected str instance, NoneType found
+```
+
+3. Run the xfailed test. As-is it reports `1 xfailed`; with `--runxfail` it fails the same way:
+
+```
+$ .venv/bin/pytest tests/unit/test_faithfulness_checker.py -k test_none_context_chunk_text -q --runxfail
+>       context_text = " ".join([chunk.get("text", "") for chunk in context_chunks])
+E       TypeError: sequence item 0: expected str instance, NoneType found
+
+rag/evaluator/faithfulness_checker.py:38: TypeError
+FAILED tests/unit/test_faithfulness_checker.py::TestFaithfulnessChecker::test_none_context_chunk_text
+1 failed, 21 deselected in 0.07s
+```
+
+**Controls (same session)**
+
+```
+$ .venv/bin/python -c "from rag.evaluator.faithfulness_checker import FaithfulnessChecker
+print(repr(FaithfulnessChecker().check('Knows Python.', [{}])))
+print(repr(FaithfulnessChecker().check('Knows Python.', [{'text': 'Knows Python well'}])))"
+2026-09-25 15:35:44 [info     ] faithfulness_checked           claims_count=1 score=0.0 supported_count=0
+0.0
+2026-09-25 15:35:44 [info     ] faithfulness_checked           claims_count=1 score=1.0 supported_count=1
+1.0
+```
+
+With the `text` key missing, `check()` returns `0.0`; with a string it returns `1.0`. Of these three inputs, only the one with `text` set to `None` crashes.
+
+**Expected:** `check()` returns a float for a chunk whose `text` is `None`, as `test_none_context_chunk_text` asserts.
+
+**Actual:** the `" ".join(...)` on line 38 raises on the `None` text, so `check()` never returns a score.
+
+**Relevant files:** `rag/evaluator/faithfulness_checker.py` (line 38), `tests/unit/test_faithfulness_checker.py` (`test_none_context_chunk_text`).
+
+I've only looked at `check()` itself, not at where `None` chunk text can come from upstream. Next I'll post a fix plan here before opening a PR.
+````
 
 ## Eval iterations
 

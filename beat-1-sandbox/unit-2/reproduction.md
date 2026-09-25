@@ -100,28 +100,26 @@ fields.
 
 **Run history**
 
-[The agreement score of each run you did, in order. A single run is a complete answer if
-only one run occurred. **The last score in your list must match the agreement line in the
-`eval-run.txt` you committed** — that file is the record of your final run.]
+1. Calibration packages only (unscored): 4/4 agreed with gold.
+2. Full run 1: **18/20**. Misses: pkg-03 and pkg-05, both false rejects.
+3. `--only` re-run of the two misses plus canaries, after revising two checks: **7/7** scored.
+4. Full run 2, saved as `eval-run.txt`: **20/20**, every category matched.
 
 **Package analysis**
 
-[Pick one scored package (`pkg-01` through `pkg-20` — the four `calib-` packages are never
-scored). Name it by id, say what your rubric decided and what the gold label said, and
-explain why your rubric read it that way.]
+**pkg-05** (conda/conda#16543). Gold: **accept**. Run 1: **reject**. Run 2: **accept**.
+
+The report describes its `env.yml` ("a valid `dependencies:` list plus a `category:` section") instead of pasting it, but it shows the exact command and the `EnvironmentSectionNotValid` warning breaking the JSON output. Run 1 failed `steps-rerunnable` because "the file contents are never shown": my check only accepted inputs that were pasted or copied from the issue. That is a shape test, and it missed the real question, whether a stranger could rebuild the input. Here they can, because the one element that triggers the bug is named exactly. After I revised the check, run 2 passed it and matched gold.
 
 **Check rationale**
 
-[Quote one check from the `rubric.md` you uploaded to `tools/repro-check/`, exactly as it reads now.
-Then say why it reads that way — what you revised to get there, or what you rejected in
-favour of it.]
+| steps-rerunnable | The repro report's steps, from starting state through the trigger. | Passes if a stranger with only public resources could re-run the attempt: every command, input, file content, and setting needed is shown, taken verbatim from the issue with a pointer to it, or described precisely enough to rebuild, including the exact element that triggers the bug (for example "the default config file with one unrecognized top-level key added" is rebuildable; "our usual config" is not). Fails if the steps depend on private code, config, or data the reader cannot get, or if a step needed to reach the trigger is left out or only gestured at ("set up the project"). | required |
+
+It originally passed only inputs that were "shown, or is taken verbatim from the issue", which false-rejected pkg-05 over a small config file that was described precisely. I added the "described precisely enough to rebuild" route so the check judges whether a stranger could re-run the steps, not whether the file was pasted. My first example was lifted from pkg-05's wording; I replaced it with a generic one so the check carries to real issues. The Fails clause is unchanged, so private inputs (pkg-18) still fail.
 
 **Trade-offs**
 
-[Every check gives something up. Any one of these is a complete answer: a package whose
-result it changes, a canary you re-ran with `--only`, a case you accept it will miss, or a
-stated reason nothing changed elsewhere. "Nothing changed, and here is how I know" earns
-the point in full when the reason follows.]
+Loosening the check risked flipping correct rejects, so I re-ran canaries with `--only`: pkg-20 (disclosure), pkg-18 (private repo), pkg-06, pkg-15, pkg-17, and calib-04. All still rejected on their intended checks. The case I accept it will miss is an input description that sounds precise but is quietly wrong; only actually re-running it would catch that.
 
 ---
 

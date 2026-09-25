@@ -57,41 +57,49 @@ so in the thread so the issue isn't silently blocked.
 - Wrong: "I'll have a fix for the None handling up in a day or two."
 - Right: "I'd like to work toward a fix. First I'll reproduce this on current `main` and post what I find, then propose an approach here before opening a PR."
 
-### Rule: name the exact thing
+### Rule: add, don't restate
 
-Every comment points at something only this issue has: the function,
-the line, the input, the error text. If a sentence could go on any
-other issue unchanged, I cut it.
+One or two specifics that show I read the issue closely: the test, the
+branch, the input, the symptom. I never restate the issue body back to
+the people who wrote it; if the maintainers already said it, I build
+on it.
 
-- Wrong: "Looks like an interesting bug, happy to help out!"
-- Right: "`check()` passes `chunk.get("text", "")` into `" ".join(...)`, and the default doesn't apply when the key is present with `None`."
+- Wrong: "The problem is that `chunk.get("text", "")` returns `None` when the key is present, so `" ".join(...)` raises a `TypeError`."
+- Right: "I'll also run `test_none_context_chunk_text`, the test that's xfailed for this issue."
 
-### Rule: show it, don't assert it
+### Rule: show what I know, name what I don't, once
 
-"Reproduced" only appears next to the output that proves it. Before the
-report exists, I say what I will check, not what I found.
+A stated result sits next to the output that proves it, and before I
+have output I say what I'll check, not what I found. Where something is
+still open, I say so in one short caveat, not a hedge on every
+sentence.
 
-- Wrong: "Confirmed, this crashes on main."
-- Right: "On `main` @ `<sha>`, `FaithfulnessChecker().check('Knows Python.', [{'text': None}])` raised: `TypeError: sequence item 0: expected str instance, NoneType found` (full output below)."
+- Wrong: "Confirmed, this crashes on main, and it's the only place `None` text can break the checker."
+- Right: "On `main` @ `<sha>`, the snippet raises `TypeError: sequence item 0: expected str instance, NoneType found` (output below). I've only traced `check()`, not its callers."
 
 ### Rule: bring my own proof, even when someone posted first
 
-If someone already reported or reproduced the issue, I don't echo
-them or lean on their evidence. My comment rests on my own run, in my
-own words. I link the earlier comment instead of repeating it, and I
-add only what's new: a different OS, version, or commit, or a detail
-their report didn't cover.
+When I post a reproduction or other evidence and someone already
+reported or reproduced the issue, I don't echo them or lean on their
+evidence. My comment rests on my own run, in my own words. I point to
+the earlier comment (a link, or "above" on the same thread) instead of
+repeating it, and I add only what's new: a different OS, version, or
+commit, or a detail their report didn't cover. If someone has already
+claimed the issue, I check with them before starting, unless the repo's
+norms say a claim doesn't block others.
 
 - Wrong: "Same as above, can confirm on my machine too."
 - Right: "Also reproduces on macOS 26 (arm64) at `main` @ `<sha>`, a different OS from the earlier report; my environment and output are below."
 
-### Rule: say what I haven't checked
+### Rule: size the comment to the moment
 
-If a question is still open, I name it as open instead of implying I
-covered it.
+A claim is 1-3 sentences: what I want to do, my next step, and a
+question only if there's a real one the maintainers need to decide.
+The detail belongs in the repro report or the PR. I write like I'm
+messaging a teammate, not filling in a form.
 
-- Wrong: "This is the only place `None` text can break the checker."
-- Right: "I've only traced `check()`; I haven't looked at whether other callers can also pass `None` text."
+- Wrong: "Hi, I'd like to work on this, with the goal of getting it fixed. My next step is to reproduce it ... From reading `faithfulness_checker.py`, line 38 builds the context with `chunk.get("text", "")` ... I haven't run it yet, so I'll confirm that in the report before proposing an approach."
+- Right: "Hi! I'd like to work on this one. I'll reproduce the `text: None` crash on current `main` (macOS), including the `test_none_context_chunk_text` test that's xfailed for it, and post what I find here before working on a fix."
 
 ## Things I never post
 
@@ -107,3 +115,6 @@ list back at you when a draft crosses it. -->
 - Commands or output I didn't run myself, or any text I haven't read and checked line by line before posting, AI-assisted or not.
 - AI assistance left undisclosed where the repo's policy asks for disclosure.
 - Filler praise ("great project!") standing in for detail about the issue.
+- The issue body restated back to the people who wrote it.
+- A hedge on every sentence ("I think", "might", "could be wrong") instead of one clear caveat.
+- A made-up question asked to look engaged; I ask only what the maintainers actually need to decide.

@@ -103,7 +103,8 @@ fields.
 1. Calibration packages only (unscored): 4/4 agreed with gold.
 2. Full run 1: **18/20**. Misses: pkg-03 and pkg-05, both false rejects.
 3. `--only` re-run of the two misses plus canaries, after revising two checks: **7/7** scored.
-4. Full run 2, saved as `eval-run.txt`: **20/20**, every category matched.
+4. Full run 2: **20/20**, every category matched.
+5. Full run 3, after revising the rubric on grader feedback, saved as `eval-run.txt`: **20/20**, every category matched.
 
 **Package analysis**
 
@@ -113,13 +114,13 @@ The report describes its `env.yml` ("a valid `dependencies:` list plus a `catego
 
 **Check rationale**
 
-| steps-rerunnable | The repro report's steps, from starting state through the trigger. | Passes if a stranger with only public resources could re-run the attempt: every command, input, file content, and setting needed is shown, taken verbatim from the issue with a pointer to it, or described precisely enough to rebuild, including the exact element that triggers the bug (for example "the default config file with one unrecognized top-level key added" is rebuildable; "our usual config" is not). Fails if the steps depend on private code, config, or data the reader cannot get, or if a step needed to reach the trigger is left out or only gestured at ("set up the project"). | required |
+| steps-rerunnable | The repro report's steps, from starting state through the last command it ran. | Passes if a stranger with only public resources could repeat exactly what the report ran: every command, input, file content, and setting it used is shown, taken verbatim from the issue with a pointer to it, or described precisely enough to rebuild, including the exact element that triggers the bug (for example "the default config file with one unrecognized top-level key added" is rebuildable; "our usual config" is not). Fails if the steps depend on private code, config, or data the reader cannot get, or if a step the report relied on is left out or only gestured at ("set up the project"). This check asks only whether the run can be repeated, not whether it was the right run. | required |
 
-It originally passed only inputs that were "shown, or is taken verbatim from the issue", which false-rejected pkg-05 over a small config file that was described precisely. I added the "described precisely enough to rebuild" route so the check judges whether a stranger could re-run the steps, not whether the file was pasted. My first example was lifted from pkg-05's wording; I replaced it with a generic one so the check carries to real issues. The Fails clause is unchanged, so private inputs (pkg-18) still fail.
+It originally passed only inputs that were "shown, or is taken verbatim from the issue", which false-rejected pkg-05 over a small config file that was described precisely. I added the "described precisely enough to rebuild" route so the check judges whether a stranger could re-run the steps, not whether the file was pasted. My first example was lifted from pkg-05's wording; I replaced it with a generic one so the check carries to real issues. Private inputs (pkg-18) still fail. After grader feedback that some checks overlapped, I narrowed it to one decision: whether the run can be repeated. Whether it was the right run now belongs only to `trigger-faithful`. That is why it ends with "not whether it was the right run".
 
 **Trade-offs**
 
-Loosening the check risked flipping correct rejects, so I re-ran canaries with `--only`: pkg-20 (disclosure), pkg-18 (private repo), pkg-06, pkg-15, pkg-17, and calib-04. All still rejected on their intended checks. The case I accept it will miss is an input description that sounds precise but is quietly wrong; only actually re-running it would catch that.
+Loosening the check risked flipping correct rejects, so I re-ran canaries with `--only`: pkg-20 (disclosure), pkg-18 (private repo), pkg-06, pkg-15, pkg-17, and calib-04. All still rejected on their intended checks. Narrowing it in run 3 moved pkg-17's failure from this check to `trigger-faithful` (it ran the Store release, not the build the issue requires); the verdict stayed reject. The case I accept it will miss is an input description that sounds precise but is quietly wrong; only actually re-running it would catch that.
 
 ---
 

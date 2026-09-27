@@ -1,32 +1,32 @@
-# eval run written by run_eval.py at 2026-09-25T06:58:29Z
+# eval run written by run_eval.py at 2026-09-27T03:50:10Z
 # model: sonnet (pinned)
 # graded: /Users/aamirkhan/.claude/skills/repro-check
 # packages: 20 scored
-#   rubric.md  sha256:d714042b0dc672bd
+#   rubric.md  sha256:bd68a5bd7768b4fe
 #   evidence-guide.md  sha256:508fcb63b68a2fe2
 #   SKILL.md  sha256:094c7ec26a0f22ed
 #
 grading 20 package(s) with rubric.md + evidence-guide.md, model sonnet, 5 worker(s)...
+  pkg-04: reject
   pkg-02: reject
   pkg-03: accept
-  pkg-04: reject
-  pkg-01: accept
   pkg-05: accept
+  pkg-01: accept
   pkg-07: accept
-  pkg-08: reject
   pkg-06: reject
+  pkg-08: reject
   pkg-10: accept
-  pkg-11: accept
   pkg-09: accept
+  pkg-11: accept
   pkg-13: reject
   pkg-12: accept
   pkg-14: reject
-  pkg-15: reject
   pkg-16: reject
-  pkg-18: reject
+  pkg-15: reject
   pkg-17: reject
   pkg-19: reject
   pkg-20: reject
+  pkg-18: reject
 
 item    gold    verdict  agree  note
 pkg-01  accept  accept   yes    

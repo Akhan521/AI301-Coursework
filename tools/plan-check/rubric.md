@@ -1,55 +1,34 @@
 # Rubric: is this plan ready to post and build from?
 
-<!--
-THIS IS THE PART YOU WRITE. The skill in SKILL.md executes whatever
-checks you define here (via your procedure.md). It ships empty on
-purpose: the judgment is your work.
-
-A filled rubric must contain:
-
-1. At least one row in the checks table. Each row needs all four
-   columns:
-   - Check: a short name (used in the output JSON).
-   - Evidence: exactly what to look at, and where in the package. Name
-     the part (the plan's scope statement, the test plan read against
-     the repro evidence's steps, the plan comment read against the
-     thread highlights, the repo-facts block) or a location from your
-     references/evidence-guide.md. "The plan" is not a source; "the
-     plan's stated cause read against what the repro evidence shows"
-     is.
-   - Pass condition: a decision rule about the OUTCOME that someone
-     else could apply and get your answer. Judge the thing itself (is
-     this one bounded change? could a stranger start executing it?),
-     never the write-up's shape (how many sections it has, how long it
-     is, whether it uses headings). Structure-shaped checks are what
-     make graders disagree with themselves.
-   - Weight: `required` (a fail here holds the package) or `preferred`
-     (never changes the verdict).
-
-2. A verdict rule below the table: how the check grades combine into
-   accept (ready) or reject (hold), including how `unclear` is
-   treated. The verdict space is binary. If you write no rule for
-   `unclear`, the skill treats it as fail.
-
-Cover what actually gets bad plans posted. The lecture named the
-failure families: the diagnosis ignores or contradicts the reproduced
-evidence, the change is unbounded (scope creep), the plan targets the
-symptom while the evidence points at the cause, a stranger could not
-start executing it, the test plan proves nothing observable, the
-unknowns are dressed up as certainty, and the comment ignores what the
-thread or the repo's stated conventions ask. A rubric that ignores a
-family will fail eval packages designed around that family.
--->
+A plan is ready when it fixes the cause its own reproduction points at,
+stays the size of the issue, could be started by a stranger, proves
+itself with an observable test, claims no more than it has shown, and
+reaches the thread in a comment that respects what the maintainers and
+the repo have already said. Each check below owns one of those
+decisions.
 
 ## Checks
 
 | Check | Evidence | Pass condition | Weight |
 |---|---|---|---|
-|  |  |  |  |
+| diagnosis-fits-evidence | The cause the plan states (and the plan comment repeats), read against every result in the reproduction evidence: the failing run, each control run, and any intermediate step that shows where the behavior first appears. | Passes if the stated cause explains the failing run AND is consistent with every control and step result: for each control, the cause predicts what the control actually showed. A cause taken from the issue or thread passes on the same test. Fails if the plan states no cause, or if any result in the reproduction evidence rules the stated cause out: a control where the blamed component works correctly under the same conditions, a step showing the defect already present before the blamed code runs, or a result the cause would predict differently. Confidence, length, or polish never rescues a cause the evidence rules out. | required |
+| fix-acts-on-cause | The plan's proposed changes, read against the cause the plan itself states. | Passes if at least one committed change alters the code path the stated cause names so the defect no longer occurs there; a guard, clamp, or normalization at the faulty operation counts. Also passes if the maintainers say in the thread that the behavior is intended or that the fix belongs elsewhere, and the change follows that. Fails if every change leaves the defective path as it is and only works around it: documenting a workaround, a catch-all that swallows the error, a retry around the failure, or advice to users. This check asks only whether the change acts on the plan's own stated cause, not whether that cause is right or whether the plan does extra work. | required |
+| scope-bounded | The plan's list of changes and files or areas, read against the behavior the issue reports. | Passes if every change the plan commits to is needed to fix or verify the reported behavior. Apply a removal test to each item: if dropping it would still leave the reported defect fixed and tested everywhere the issue, thread, or the plan's diagnosis locates it, it is extra. Fixing the same faulty operation at another site the issue or diagnosis identifies as the same defect is part of the fix; a similar pattern found elsewhere in the code is extra unless deferred. Regression tests for the fix, removing markers or suppressions that track this bug, docs for behavior the fix changes, and reading or auditing nearby code without changing it all stay in scope. Extra work the plan explicitly defers or splits out ("not in scope", "separate issue") is fine. Fails if the plan commits to extra work, even alongside a correct core fix: a rewrite or refactor, a migration, a dependency upgrade, a new option, setting, or UI, a new framework or abstraction, a test-harness or CI overhaul, or fixing other bugs while in the area. | required |
+| stranger-can-start | The plan's files or code areas, its approach, and its order of work. | Passes if the plan names where the change goes (a file, function, handler, or code path a stranger could find in the repo) and commits to one approach, so someone who has never spoken to the author could begin. An exact line or function left to pin down during the build is fine when the plan names the code path it lies in and says how it will be pinned. Fails if the location is missing or vague ("somewhere in the parser"), a choice between alternatives is left open until build time ("fix it in the library or in our wrapper, whichever is easier"), or the steps are investigation with no chosen change ("profile it and optimize whatever is slow"). | required |
+| test-decisive | The plan's test plan, read against the reproduction evidence's failing steps and their recorded output. | Passes if the test plan names at least one observable outcome for this fix: re-running the reproduction's trigger (or a test that encodes it) with the specific result expected after the fix (an output, value, exit code, timing threshold, or visible state) that differs from what the reproduction recorded. Fails if the only checks are that the existing suite passes or nothing regresses, or if the expected result has no observable form ("it should work now", "performance should be better"). | required |
+| claims-backed | The plan's and comment's claims about the approach and its effects: what has been verified, what the change will achieve, and what the plan assumes. If the plan records deviations from the build, also what it says changed. The statement of the cause itself is not this check's evidence. | Passes if every claim that something is verified, confirmed, or will work is backed by evidence in the package, or is labeled as an assumption, open question, or unknown. Read each claim together with the qualifiers around it: a passage that says what was checked and what is still unchecked, and how that will be settled, is labeled even if one sentence in it reads as general. A first-hand statement of what the author checked, limited to exactly what was checked, counts as backed. A plan that names no risks passes if it asserts nothing it has not shown. A recorded deviation with its reason passes. Fails if the plan or comment presents as settled something the package does not show: an assumption the approach depends on stated as fact, an effect promised beyond what the test plan will observe ("this eliminates the whole category of bug"), or certainty standing in for evidence. | required |
+| comment-carries-plan | The plan comment on its own, as a reader of the issue thread will see it. | Passes if a reader of the comment alone learns, in the author's own words, what will change, where in the code it changes, and how the fix will be checked, and the comment commits to no work the plan does not contain. Fails if the comment is enthusiasm or intent without a plan ("I'll dig in and open a PR"), only points at someone else's plan ("same approach as above"), or promises changes the plan does not contain. | required |
+| follows-thread | The plan comment and plan, read against what the issue thread has already established about the fix: comments by maintainers, members, collaborators, or the owner that give a direction, isolate a culprit, reject an approach, or call the behavior intended; and any open pull request, posted patch, or test build for this issue. | Passes if the thread holds none of these, or if the comment follows each one or names it and says how this plan relates to it (builds on it, diverges and why, or defers to it). Fails if the comment ignores a maintainer's stated direction, isolated culprit, rejected approach, or intent call, or ignores an open pull request, patch, or test build for this same issue, so a maintainer would have to point the author back to their own thread. | required |
+| ai-disclosure-met | The repo's stated contribution policy and any AI-use policy it links (CONTRIBUTING, an AI policy file, PR or issue templates), read against the text of the plan comment. | If the policy requires disclosing AI use in comments or "in any form", passes only if the comment discloses it (the tool or kind of tool, and its extent) or states plainly that no AI was used; silence fails, because a reader cannot tell which is true. If the policy asks for disclosure only in pull requests, only requires comments in the author's own words, or states no AI policy, passes when the comment reads as the author's own specific words; no disclosure line is needed. | required |
+| controls-retested | The test plan, read against the control runs in the reproduction evidence. | Passes if the test plan re-runs at least one of the reproduction's control runs and expects it to behave as before, showing that the fix changes only the failing case. | preferred |
+| repo-asks-planned | The repo's contributing guide and PR template, read against the plan's files, approach, and test plan. | Passes if the plan includes each thing the guide asks of a change of this kind (for example tests for the change, removing a marker or suppression that tracks the bug, docs, a changelog entry). | preferred |
 
 ## Verdict rule
 
-<!-- State how the grades above combine into accept or reject, and how
-unclear is treated. Example shape (write your own): "accept if every
-required check passes; preferred checks never change the verdict;
-unclear counts as fail." -->
+Accept only if every check weighted `required` in the table grades
+`pass`. Reject if any required check grades `fail`. `unclear` on a
+required check counts as `fail`: a plan that cannot be verified from
+the package is not ready to build from.
+
+Checks weighted `preferred` never change the verdict; report them so
+the author knows what would make a ready plan stronger.

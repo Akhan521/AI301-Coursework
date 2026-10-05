@@ -29,10 +29,16 @@ checked.
    no direction, no competing work".
 4. **The repo's rules.** Read the contribution policy (the snapshot's
    repo-facts block, or live, CONTRIBUTING, any AI policy file, and the
-   PR template). Record two things: (a) the AI-use disclosure rule, in
-   one of three forms: "comments must disclose", "PRs only / own
+   PR template). Record three things: (a) the AI-use disclosure rule,
+   in one of three forms: "comments must disclose", "PRs only / own
    words", or "none stated"; (b) anything the guide asks of every fix
-   (tests, marker removal, docs, changelog).
+   (tests, marker removal, docs, changelog); (c) every gate the repo
+   enforces on a change, with what each runs on. Live, read
+   `.pre-commit-config.yaml` (hooks run on every touched file, tests
+   included), the CI workflow files under `.github/workflows/` (each
+   job and the paths it checks), and the check targets in the
+   `Makefile` or equivalent. In a snapshot, record whatever gates the
+   repo facts name, or "none shown".
 5. **The reproduction.** Read the reproduction evidence end to end. For
    the failing run, record the exact trigger and the recorded output.
    For each control run and each intermediate step, record what was
@@ -40,9 +46,12 @@ checked.
    must predict: <observation>". These lines are the diagnosis test.
 6. **The plan.** Read the candidate plan. Record its stated cause
    (verbatim), its list of committed changes (one line each, including
-   "while in there" items and anything deferred), its files and code
-   paths, its test plan's expected outcomes, its stated risks and
-   unknowns, and any Deviations section.
+   "while in there" items, anything deferred, and any change its
+   Deviations section says was added during the build), its core change
+   (the change at the code path where the defect lives, or, if there is
+   none there, the change it presents as resolving the issue), its files
+   and code paths, its test plan's expected outcomes and the gates it
+   names, its stated risks and unknowns, and any Deviations section.
 7. **The comment.** Read the plan comment last, as a thread reader
    would, without the plan beside it. Record what it says will change,
    where, how it will be checked, what it commits to, and whether it
@@ -63,13 +72,19 @@ bundle text.
    plan's cause. Record which change, if any, alters the code path the
    cause names. Also record whether any maintainer note (step 3) says
    the behavior is intended or the fix belongs elsewhere.
-3. `scope-bounded`: take each committed change (step 6) and apply the
-   removal test against the reported behavior (step 2). Mark it
-   "needed", "deferred", or "extra", and quote the plan's words for
-   every "extra".
+3. `scope-bounded`: take each committed change (step 6) other than the
+   core change and apply the removal test against the core change and
+   its verification. Mark it "needed", "deferred", "gate-required" (a
+   gate from step 4c demands it of a touched file), or "extra", and
+   quote the plan's words for every "extra". Then check whether the core
+   change itself reaches past the faulty code path, and quote the
+   reaching part if it does. Do not judge here whether the core change
+   fixes the defect.
 4. `stranger-can-start`: record the named file, function, or code path
    for each change, or "none". Record any place the plan leaves a
-   choice open or plans only investigation, quoting it.
+   choice open or plans only investigation, quoting it. In live mode,
+   confirm each named file and function exists on the default branch
+   and record any that do not.
 5. `test-decisive`: record each expected outcome in the test plan.
    Mark each one "observable and differs from the recorded failure",
    "suite or no-regression only", or "no observable form".
@@ -77,7 +92,10 @@ bundle text.
    something is verified, confirmed, guaranteed, or will be achieved,
    leaving out the cause statement. Beside each, record the package
    evidence that backs it, the label that marks it as an assumption, or
-   "unbacked".
+   "unbacked". In live mode, a claim about the repo's code that the
+   drafts state without quoting (a line number, a call order, what a
+   command covers) may be checked against the default branch; record
+   what the repo shows.
 7. `comment-carries-plan`: from step 7's notes, record whether the
    comment alone says what, where, and how-checked. Then compare its
    commitments with step 6's change list and record anything it
@@ -90,7 +108,8 @@ bundle text.
 10. `controls-retested`: record whether the test plan re-runs any
     control from step 5.
 11. `repo-asks-planned`: put step 4b's asks next to the plan's changes
-    and test plan, and record which are covered.
+    and test plan, and step 4c's gates next to the gates the test plan
+    names. Record which asks and which gates are covered.
 
 ## Check execution
 

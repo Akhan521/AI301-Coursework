@@ -47,14 +47,22 @@ evidence were absent.
 
 - Where it lives. Snapshot: the plan's change list, its in-scope and
   not-in-scope lines, its files and areas, and any "while in there" or
-  "also" items, set against the behavior the issue reports. Live: the
-  same parts of the draft plan, set against the issue body.
-- What good looks like: one bounded change. Each listed item is needed
-  to fix or verify the reported behavior (removal test: delete the
-  item, and if the bug is still fixed and tested, the item was extra).
-  Adjacent problems are named and deferred, not folded in. Regression
-  tests, removing markers that track the bug, and docs for changed
-  behavior belong in the change.
+  "also" items, set against the plan's core change (the change at the
+  code path where the defect lives, or, failing that, the change it
+  presents as resolving the issue). Live: the same parts of the draft
+  plan, plus anything its Deviations section says was added during the
+  build.
+- What good looks like: one bounded change. Every other item is needed
+  for the core change or its verification (removal test: delete the
+  item, and if the core change and its check still stand, the item was
+  extra), and the core change stays on the faulty code path instead of
+  rebuilding what surrounds it. Adjacent problems are named and
+  deferred, not folded in. Regression tests, removing markers that
+  track the bug, docs for changed behavior, and edits a repo gate
+  forces on a touched file (a pre-commit type check on a test file the
+  fix edits) belong in the change. Whether the core change actually
+  fixes the bug is a separate question; scope only asks whether the
+  plan does more than it.
 - Red flags: "rather than patch the one site, rebuild the whole
   subsystem"; dependency bumps, migrations, new options or settings, new
   abstractions, CI overhauls; "since we're touching this anyway".
@@ -78,14 +86,20 @@ evidence were absent.
 ## Test plan
 
 - Where it lives. Snapshot: the plan's Test plan, set against the
-  reproduction evidence's steps, commands, and recorded output. Live:
-  the draft plan's test plan, set against the posted repro comment's
-  commands and output.
+  reproduction evidence's steps, commands, and recorded output, and
+  any checks the repo facts name. Live: the draft plan's test plan, set
+  against the posted repro comment's commands and output, and against
+  every gate the repo enforces: `.pre-commit-config.yaml` (hooks run on
+  each touched file, often including tests that CI's own checks skip),
+  the jobs in `.github/workflows/`, and the check targets in the
+  `Makefile` or equivalent.
 - What good looks like: the reproduction's trigger is re-run (by hand
   or encoded as a test), and the plan states what will be observed
   after the fix: the output line, value, exit code, threshold, or
   visible state, which differs from what the reproduction recorded.
-  Strong plans also re-run a control and expect it unchanged.
+  Strong plans also re-run a control and expect it unchanged, and
+  name the gates the change must clear, so predicted outcomes match
+  what the repo will actually demand at commit and in CI.
 - Red flags: "the full suite passes" as the only check; "should feel
   faster" or "should work"; a test plan that never touches the
   reproduction's trigger.

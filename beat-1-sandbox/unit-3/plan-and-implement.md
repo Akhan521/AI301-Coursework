@@ -134,7 +134,13 @@ nothing else moving.
    clear accepts: pkg-02 on `scope-bounded` and pkg-03 on `claims-backed`.
 3. Partial re-grade after revising those two checks (`--only pkg-02,pkg-03,pkg-06,pkg-15,pkg-19`,
    the last three as scope-creep canaries): 5/5. The canaries still rejected on `scope-bounded`.
-4. Full run 2: **20/20** (bar: PASS); every category matched (clear-accept 7/7, scope-creep 4/4,
+4. Full run 2: **20/20** (bar: PASS); every category matched. This was the run I first submitted.
+5. Post-grade revision. Grader feedback: `scope-bounded` and `fix-acts-on-cause` both failed
+   pkg-04 for the same mistake, and I should enumerate every gate a repo enforces. I moved the
+   `scope-bounded` seam and added gates to `repo-asks-planned`, then re-graded
+   `--only pkg-04,pkg-06,pkg-12,pkg-15,pkg-19,pkg-02,pkg-09,pkg-20`: 8/8. pkg-04 now passes
+   `scope-bounded` and still rejects. All four scope-creep canaries still fail `scope-bounded`.
+6. Full run 3: **20/20** (bar: PASS); every category matched (clear-accept 7/7, scope-creep 4/4,
    thread-convention 2/2, unbuildable 3/3, wrong-cause 4/4). This is the committed `eval-run.txt`.
 
 **Package analysis**
@@ -146,51 +152,62 @@ The plan's diagnosis is fine. "fzf keeps reading console input while an `execute
 predicts all three results in the repro: keys landing in fzf's prompt, the Ubuntu control
 working, and the `> /dev/tty` control working. So `diagnosis-fits-evidence` passed. What sinks
 the package is that it answers a code bug with documentation, in a thread where the owner had
-already gone further. The run 2 notes:
+already gone further. The run 3 notes:
 
-- `follows-thread` failed: "Comment ignores junegunn's 'This seems to be the culprit' pointer to
-  src/tui/light_windows.go and the patched test binary from commit 8916cbc." This is the check
-  the category was built for. The owner isolated the culprit and posted a patched binary for
-  testing, and a comment that proposes docs without mentioning either sends the maintainer back
-  to their own thread.
-- `fix-acts-on-cause` failed: "Only man page, README and FAQ changes ... this documents a
-  workaround. The owner named light_windows.go as the culprit rather than calling it intended."
-  The plan's own stated cause lives in the input handling, and it rules that out of scope. The
-  check's one exception, a maintainer calling the behavior intended, doesn't apply.
-- `comment-carries-plan` failed because the comment never says how the docs will be checked. The
-  plan's test plan does say (`test-decisive` passed), but the comment has to stand on its own.
+- `follows-thread` failed: "Owner isolated light_windows.go lines 70-84 and posted a patched test
+  binary (8916cbc); the comment mentions neither." This is the check the category was built for.
+  A comment that proposes docs without mentioning either sends the maintainer back to their own
+  thread.
+- `fix-acts-on-cause` failed: "Docs only; 'Not in scope: any change to fzf's input handling code'
+  leaves the named defective path untouched, a workaround; no maintainer said intended." The
+  plan's own stated cause lives in the input handling, and the plan rules that out of scope.
+- `comment-carries-plan` failed: "Comment states what and where but nothing about how the work
+  will be checked."
+- `scope-bounded` **passed**: "Man page note, README examples and FAQ entry all serve the single
+  docs core change; nothing deferred-worthy or unrelated added."
 
-One thing I don't like about this result: `scope-bounded` also failed ("None of the docs-only
-items ... fixes or tests the reported defect, so each is extra by the removal test"). That is the
-same underlying mistake as `fix-acts-on-cause` showing up in a second check. The verdict is
-right, but a plan that only works around the bug shouldn't also count as scope creep. The cleaner
-seam would scope the removal test to plans that contain a fix, and leave "no fix at all" to
-`fix-acts-on-cause`. I didn't make that change, because the rubric is frozen to the committed
-run's fingerprint.
+That last line is the revision. In runs 1 and 2, `scope-bounded` also failed pkg-04, because
+every docs item "fixes or tests" nothing and so failed the removal test. That was the same
+mistake as `fix-acts-on-cause` firing in a second check. The verdict was right, but the failure
+list told the author two things were wrong when only one was. Now `scope-bounded` measures items
+against the plan's own core change, so a workaround-only plan fails once, in the check that owns
+that decision.
 
 **Check rationale**
 
 From `tools/plan-check/rubric.md`:
 
 ```
-| scope-bounded | The plan's list of changes and files or areas, read against the behavior the issue reports. | Passes if every change the plan commits to is needed to fix or verify the reported behavior. Apply a removal test to each item: if dropping it would still leave the reported defect fixed and tested everywhere the issue, thread, or the plan's diagnosis locates it, it is extra. Fixing the same faulty operation at another site the issue or diagnosis identifies as the same defect is part of the fix; a similar pattern found elsewhere in the code is extra unless deferred. Regression tests for the fix, removing markers or suppressions that track this bug, docs for behavior the fix changes, and reading or auditing nearby code without changing it all stay in scope. Extra work the plan explicitly defers or splits out ("not in scope", "separate issue") is fine. Fails if the plan commits to extra work, even alongside a correct core fix: a rewrite or refactor, a migration, a dependency upgrade, a new option, setting, or UI, a new framework or abstraction, a test-harness or CI overhaul, or fixing other bugs while in the area. | required |
+| scope-bounded | The plan's committed changes and files or areas, including any its Deviations section records as added during the build, read against the plan's core change: the change it makes at the code path where the reported defect lives, or, if it makes none there, the change it presents as resolving the issue. | Passes if every committed change is the core change, its verification, or needed for them. Apply a removal test to each other item: if dropping it would leave the core change and its verification intact, it is extra. A core change that reaches past the faulty code path (rewriting or restructuring the surrounding module, subsystem, or other constructs to deliver the fix) counts as extra beyond the part that fixes that path. Fixing the same faulty operation at another site the issue or diagnosis identifies as the same defect is part of the core change; a similar pattern found elsewhere in the code is extra unless deferred. Regression tests, removing markers or suppressions that track this bug, docs for behavior the change alters, changes the repo's enforced gates (pre-commit hooks, CI jobs, lint, format, or type checks) require of the files the change touches, and reading or auditing nearby code without changing it all stay in scope. Extra work the plan explicitly defers or splits out ("not in scope", "separate issue") is fine. Fails if the plan commits to extra work: a rewrite or refactor, a migration, a dependency upgrade, a new option, setting, or UI, a new framework or abstraction, a test-harness or CI overhaul, or fixing other bugs while in the area. This check judges only whether the plan does more than its core change, never whether the core change fixes the defect. | required |
 ```
 
-This row came out of full run 1. Its original removal test asked whether dropping an item "would
-still leave the reported behavior fixed and tested". On pkg-02 the grader applied that literally:
-the repro is fixed by the line-934 clamp alone, so the plan's clamp at the sibling site, line
-795, counted as extra. But the issue itself names line 795 as the same wide-char/tiny-width
-defect, so leaving it out would ship a half fix. I widened the removal test to "the reported
-defect ... everywhere the issue, thread, or the plan's diagnosis locates it". Then I added the
-sentence that keeps the widening from swallowing scope creep: the same faulty operation at a site
-the issue or diagnosis names is part of the fix, and "a similar pattern found elsewhere in the
-code is extra unless deferred".
+The row has been revised twice, each time to fix the seam rather than special-case a package.
 
-I rejected special-casing pkg-02, for example "sibling sites the issue lists are OK". That fixes
-one package's wording, not the logic. I also rejected dropping the removal test for a list of
-banned changes. The list alone can't tell a needed new mechanism from a gratuitous one: pkg-20's
-generation counter is new code but necessary, while pkg-19's state machine is new code and not
-necessary. The list stays as examples, but the removal test makes the call.
+1. **After full run 1.** The removal test asked whether dropping an item "would still leave the
+   reported behavior fixed and tested". On pkg-02 that made the clamp at the sibling site (line
+   795) look extra, even though the issue names it as the same defect. So "the same faulty
+   operation at another site the issue or diagnosis identifies as the same defect" became part
+   of the fix, and "a similar pattern found elsewhere in the code is extra unless deferred" kept
+   that from swallowing scope creep.
+2. **After grading.** The removal test was still measured against "the reported defect fixed".
+   That meant a plan with no real fix failed it on every item, duplicating `fix-acts-on-cause`.
+   The seam moved: items are now measured against the plan's **core change** (the change at the
+   faulty code path, or failing that, the one it presents as the fix). The row ends by giving up
+   the other question explicitly: "This check judges only whether the plan does more than its
+   core change, never whether the core change fixes the defect."
+   - **What stops a redesign from calling itself the core change:** "A core change that reaches
+     past the faulty code path ... counts as extra beyond the part that fixes that path." Without
+     it, pkg-12's printer rebuild and pkg-19's state machine could have passed.
+   - **Gate-required lines:** I also added changes "the repo's enforced gates ... require of the
+     files the change touches" to the in-scope list. That settles by rule the mypy annotations my
+     own build needed, which a grader had previously passed on judgment.
+   - **Deviations:** the Evidence column now includes changes a Deviations section records, so
+     build-time additions get scoped too.
+
+I rejected two alternatives. One was a pkg-04-specific carve-out ("documentation plans are in
+scope"), which would fix one package's shape, not the seam. The other was removing
+`scope-bounded`'s removal test entirely and relying on the list of banned changes. The list
+can't tell pkg-20's necessary new counter from pkg-19's unnecessary state machine.
 
 **Trade-offs**
 
@@ -200,21 +217,23 @@ necessary. The list stays as examples, but the removal test makes the call.
    elsewhere in the code is extra unless deferred", a plan that also fixes an identical bug in a
    neighboring component fails unless it defers it. My own plan pays for this: `RelevanceScorer`
    crashes on the same `text: None` input, and `EvalSuite.run()` calls it first, so after my fix
-   the suite as a whole still crashes on a `None` chunk. The rubric pushed me to defer it to a
-   separate issue rather than fold it in. I think that's the right call for reviewability, but
-   it means the user-visible crash outlives this PR.
-2. **Widening the removal test risked letting scope creep through.** Accepting "the same defect
-   at another site" could have let pkg-06, pkg-15, or pkg-19 argue that their extra work was the
-   same defect. So I re-ran those three as canaries alongside pkg-02 and pkg-03. All three still
-   rejected on `scope-bounded`, citing the containerd upgrade, the undici migration and settings
-   panel, and the state-machine rewrite. The confirming full run then held scope-creep at 4/4.
-3. **Lines the repo's own tooling forces aren't covered.** My live plan-check after the build
-   flagged a case the row doesn't decide. The pre-commit mypy hook forced two `list[dict]`
-   annotations onto existing test lines. Read strictly, they fail the removal test, since the bug
-   is fixed without them. The grader passed them as "required by the repo's own gate" and said
-   the rubric should decide this explicitly. I recorded them under Deviations rather than edit
-   the frozen rubric. A future revision should say that changes the repo's own commit gates
-   require for the touched files stay in scope.
+   the suite as a whole still crashes on a `None` chunk. I think deferring is right for
+   reviewability, but the user-visible crash outlives this PR.
+2. **It no longer says anything about a plan that fixes nothing.** Measuring against the plan's
+   own core change means a docs-only or workaround-only plan passes `scope-bounded` as long as it
+   stays small. That is deliberate, since `fix-acts-on-cause` owns that failure. But it means the
+   verdict now depends on that one check to catch workarounds: if `fix-acts-on-cause` is ever
+   loosened, nothing backs it up. I checked that the move didn't open a hole the other way. I
+   re-ran pkg-04 as the target, all four scope-creep packages as canaries, and pkg-02, pkg-09,
+   and pkg-20 as accept or in-scope guards: 8/8. The scope-creep packages still failed
+   `scope-bounded` on the containerd bump, the undici migration, the printer restructure, and the
+   state-machine rewrite. The confirming full run held 20/20.
+3. **"Core change" is a judgment call.** The grader has to pick which change is the core one. For
+   a plan that changes the faulty path it is clear-cut. For a plan that doesn't, the fallback
+   ("the change it presents as resolving the issue") trusts the plan's own framing. A plan that
+   presented a redesign as the fix and touched nothing at the faulty path would pass
+   `scope-bounded` and rely on `fix-acts-on-cause` again. I accept that, rather than make
+   `scope-bounded` re-judge the fix.
 
 ---
 

@@ -1,33 +1,33 @@
-# eval run written by run_eval.py at 2026-10-03T07:42:56Z
+# eval run written by run_eval.py at 2026-10-05T04:52:59Z
 # model: sonnet (pinned)
 # graded: /Users/aamirkhan/.claude/skills/plan-check
 # packages: 20 scored
-#   rubric.md  sha256:93993fa6266763d4
-#   evidence-guide.md  sha256:fb4f1c08f612a7d8
-#   procedure.md  sha256:77c04c303923031c
+#   rubric.md  sha256:deaba997a4a9deb9
+#   evidence-guide.md  sha256:9329c698e43c0f3f
+#   procedure.md  sha256:db5f4a2f1f0a8b8e
 #   SKILL.md  sha256:4688d0d0f4cf6cb3
 #
 grading 20 package(s) with rubric.md + evidence-guide.md + procedure.md, model sonnet, 5 worker(s)...
   pkg-03: accept
   pkg-01: reject
-  pkg-05: accept
   pkg-04: reject
+  pkg-05: accept
   pkg-02: accept
   pkg-06: reject
-  pkg-08: accept
   pkg-07: reject
-  pkg-09: accept
   pkg-10: reject
-  pkg-11: reject
+  pkg-08: accept
+  pkg-09: accept
   pkg-12: reject
+  pkg-11: reject
   pkg-13: accept
-  pkg-14: accept
   pkg-15: reject
+  pkg-14: accept
   pkg-17: reject
   pkg-16: reject
   pkg-18: reject
-  pkg-20: reject
   pkg-19: reject
+  pkg-20: reject
 
 item    category           gold    verdict  agree  note
 pkg-01  wrong-cause        reject  reject   yes    

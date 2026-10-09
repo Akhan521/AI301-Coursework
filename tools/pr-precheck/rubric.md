@@ -1,69 +1,35 @@
 # Rubric: is this pull request ready to submit?
 
-<!--
-THIS IS THE PART YOU WRITE (fourth week running; this is the rubric's
-final form in the sandbox). Your frame in SKILL.md executes whatever
-checks you define here, via your procedure.md. It ships empty on
-purpose: the judgment is your work.
-
-A filled rubric must contain:
-
-1. At least one row in the checks table. Each row needs all four
-   columns:
-   - Check: a short name (used in the output JSON).
-   - Evidence: exactly what to look at, and where in the package. Name
-     the part (the diff read against the plan's scope, the test
-     evidence read against the plan's test plan, the description read
-     against the diff, the repo-facts block's template asks) or a
-     location from your references/evidence-guide.md. "The PR" is not
-     a source; "the diff's changed files read against the plan's
-     stated boundary" is.
-   - Pass condition: a decision rule about the OUTCOME that someone
-     else could apply and get your answer. Judge the thing itself
-     (does the diff fall inside the plan plus its deviation notes? is
-     the claimed evidence observable?), never the write-up's shape
-     (how long the description is, how many commits there are).
-     Structure-shaped checks are what make graders disagree with
-     themselves.
-   - Weight: `required` (a fail here holds the package) or `preferred`
-     (never changes the verdict).
-
-2. A verdict rule below the table: how the check grades combine into
-   accept (submit) or reject (hold), including how `unclear` is
-   treated. The verdict space is binary. State the `unclear`
-   treatment explicitly: the frame here is YOUR SKILL.md, so a rubric
-   that stays silent is only covered if your frame's grading
-   discipline says what happens (the contract's own default is that
-   an unverifiable claim fails).
-
-Cover what actually gets bad PRs submitted. The failure families the
-lecture named ARE the harness's scoring categories, same names as the
-eval README: silent drift (the diff silently does more or less than
-the posted plan, or the description claims fidelity the diff
-contradicts), not tested (the evidence proves nothing observable, or
-the repo's own checks were never run), unreviewable (debris or
-unrelated hunks bury the change), and standards wall (the repo's
-stated template and disclosure asks are ignored). Your evidence
-guide's four headings map onto these one to one (plan fidelity =
-silent drift, test evidence = not tested, diff quality =
-unreviewable, standards and comms = standards wall), and the category
-floor is scored on exactly these names plus clear accept. A rubric
-that ignores a category will fail the eval packages built around
-that category. And remember the honest-outcome
-rule, fourth week running: a PR that honestly discloses a shortfall
-can be ready; a rubric that equates "less than everything" with
-"hold" fails the set.
--->
+A pull request is ready when its diff is the plan it claims to
+implement (no more, and no less without saying so), its description
+tells the truth about that diff, its evidence shows the fix working
+on the reproduction's own trigger and the repo's checks run, its diff
+carries nothing a reviewer has to read past, and it meets what the
+repo asks of every pull request. A shortfall the PR discloses is not
+a failure: less than everything, said plainly, can be ready. Each
+check below owns one of these decisions.
 
 ## Checks
 
 | Check | Evidence | Pass condition | Weight |
 |---|---|---|---|
-|  |  |  |  |
+| diff-within-plan | Every hunk in the diff, read against the plan's committed changes, its stated boundary, and its Deviations section. | Passes if every hunk that changes behavior, names, structure, configuration, dependencies, or docs is the planned change, a test of it, something it needs to build, run, or be verified, an edit the repo requires (a fix a gate forces on a touched file, a changelog or release-note entry, removing a marker that tracks this bug), or an addition the Deviations section or description names with the reason the planned change needed it. Fails if any hunk is none of these, such as a refactor, a new option or flag, a dependency bump, or a change the plan scopes out. An addition the planned change does not need fails even when disclosed, because it belongs in its own pull request. Debris (debug output, unused code, formatting churn) is not this check's question. | required |
+| plan-delivered | Each change, test, and doc the plan commits to, read against the diff; for anything absent, the plan's deferral and Deviations notes and the description. Changelog and release-note entries are not this check's evidence. | Passes if every committed item is in the diff (where the plan says, or an equivalent place that does the same job), or its absence is disclosed with a reason in the plan's notes or the description. Fails if a committed item is missing without disclosure: the core change, a site or failure mode the plan says it fixes, a planned test, or a planned docs change. | required |
+| description-matches-diff | Statements in the title and description about what the diff contains or how far it goes, read against the diff. | Passes if the diff contradicts none of them; a loose summary of something the diff does contain passes. Fails on a contradiction a reviewer could point to: a file, entry, test, or doc the description claims that is absent from the diff, or a claim of fidelity to the plan ("no other changes") over hunks the plan does not contain. Claims about what was run or observed are not this check's evidence. | required |
+| fix-observed | The test evidence, read against the plan's test plan and the reproduction's trigger and recorded failure. | Passes if every trigger or failure mode the test plan says it will re-run is shown re-run on the changed code, naming what was run (a command, an input, or UI steps) and showing a specific result a reviewer can compare with the plan's expected-after: captured output, a value, an exit code, exact on-screen text, or a screenshot. The before may be shown or cited from the reproduction. A trigger left out passes only if the description says so and why. Fails if the evidence asserts success without a specific observed result, exercises only a control or a path the change does not touch, or silently skips a trigger the test plan names. Whether the repo's suite ran is not this check's question. | required |
+| repo-checks-run | The check commands the repo states for a change (in its contributing guide or PR template) and any suite the plan's test plan names, read against the test evidence and the description. | Passes if each is named with its outcome (a result line, a pass count, or a ticked checklist item), or reported as failing or unable to run with its output or reason. Passes when neither the repo nor the plan names a check. Checks that run only after the pull request is opened (CI) are not expected yet. Fails if a named check has no stated outcome, the only statement is an unnamed "tests pass", or a check is reported passing where the evidence shows it failing. | required |
+| diff-clean | Every added and removed line in the diff. | Passes if the diff carries no debug output left from investigating (live or commented out), no commented-out code, no added code that is never used, no TODO or note to self the change does not resolve, and no block whose only change is formatting, whitespace, or import order beyond what a repo gate forces. Comments that explain the fix are not debris. Fails if any of these is present, however small. | required |
+| repo-asks-met | The repo's asks of a pull request's text and companion files, other than its AI-use policy and its check commands: PR template sections and checklists, the issue-reference format, title or commit conventions, and required changelog or release-note entries in whatever form the repo names. Read against the title, description, commits, and diff. | Passes if each ask is met with real content or marked not applicable with a reason, and, whatever the repo states, the description names the issue it resolves. Fails if a template section or checklist is missing or left as placeholder text, the issue is not named, a required entry is absent without a reason, or a stated convention is broken. | required |
+| ai-disclosure-met | The repo's stated AI-use policy (a contributing-guide section, an AI policy file, or a disclosure field in the PR template), read against the title and description. | If the policy requires disclosing AI use in pull requests or in any form, passes only if the description discloses it (the tool or kind of tool, and how far it helped) or states plainly that no AI was used; silence fails, because a reviewer cannot tell which is true. If the policy only asks for the author's own words, or welcomes AI use without asking for disclosure, passes when the description reads as the author's own account of the change. Passes if the repo states no AI policy. | required |
+| test-pins-fix | Tests the diff adds or changes, read against the reproduction's trigger. | Passes if at least one added or changed test drives the defect's trigger and asserts the fixed outcome, so it would fail with the change reverted. Passes when the plan commits to no test. | preferred |
+| follows-maintainers | Thread comments by the repo's maintainers (OWNER, MEMBER, or COLLABORATOR) that direct the fix: a requested or rejected approach, a stated constraint, or a call that behavior is intended. Read against the diff and description. | Passes if the thread holds no such direction, or the pull request follows each one, or the description names it and says why it diverges. | preferred |
 
 ## Verdict rule
 
-<!-- State how the grades above combine into accept or reject, and how
-unclear is treated. Example shape (write your own): "accept if every
-required check passes; preferred checks never change the verdict;
-unclear counts as fail." -->
+Accept only if every check weighted `required` in the table grades
+`pass`. Reject if any required check grades `fail`. `unclear` on a
+required check counts as `fail`: a pull request that cannot be
+verified from the package is not ready to submit.
+
+Checks weighted `preferred` never change the verdict; report them so
+the author knows what would make a ready pull request stronger.

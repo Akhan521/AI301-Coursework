@@ -75,16 +75,19 @@ if that evidence were absent.
   on the branch: the command, input, or UI steps are named and the
   observed result is shown (output, value, exit code, exact on-screen
   text, or a screenshot), matching the plan's expected-after and
-  differing from the recorded failure. Every trigger the test plan
-  named gets the same treatment, or the description says which one
-  was not re-run and why. The repo's named checks appear with their
+  differing from the recorded failure. Every failure the
+  reproduction recorded gets the same treatment, or the description
+  says which one was not re-run and why. Other outcomes the test plan
+  names (a new behavior or edge case the change adds) can be shown
+  the same way or pinned by an added test reported passing. The repo's named checks appear with their
   outcomes; a check that failed or could not run is reported with its
   output and reason, which is honest evidence. A strong PR adds a
   test that drives the defect's trigger and would fail without the
   fix.
 - **Not decisive.** A sentence asserting success with nothing
   observed; evidence from a control or a different input than the one
-  that failed; one trigger of several re-run with the rest silent;
+  that failed; one recorded failure of several re-run with the rest
+  silent;
   "tests pass" with no command named; a test that exercises code the
   change does not touch.
 

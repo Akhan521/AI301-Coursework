@@ -84,12 +84,18 @@ side-by-side it reads.
    place doing the same job), "disclosed absent" (quote the note), or
    "missing".
 3. **The description against the diff.** For each statement from
-   step 8 about the diff's contents or reach, record "holds" or
-   "contradicted" (quote the diff fact that contradicts it).
-4. **The evidence against the test plan.** For each trigger in the
-   plan's test plan (step 4), record one of: "re-run, specific result"
-   (quote it), "asserted, nothing observed", "only a control or
-   another path", "not re-run, disclosed", or "silently absent".
+   step 8 about the diff's contents or reach, record "holds",
+   "imprecise summary" (a count or paraphrase of something the diff
+   does contain), or "misstated" (quote the diff fact that shows it).
+4. **The evidence against the test plan.** For each item in the
+   plan's test plan (step 4) other than a control run, first mark it
+   "recorded failure" (a failure the reproduction recorded, step 5)
+   or "other outcome" (a new behavior or edge case the change adds).
+   Then record one of:
+   "re-run, specific result" (quote it), "pinned by an added test
+   reported passing" (name the test; counts only for an other
+   outcome), "asserted, nothing observed", "only a control or another
+   path", "not re-run, disclosed", or "silently absent".
 5. **Check outcomes against the named checks.** For each check from
    step 3c and each suite the plan names, record "outcome stated"
    (quote it), "reported failing or unable, with reason", "no

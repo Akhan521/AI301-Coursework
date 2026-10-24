@@ -1,4 +1,4 @@
-# Contribution: [Issue Title]
+# Contribution: Validate `core_rus7__yearly_balance_sheet_assets` and corresponding output table
 
 Path: `beat-2-contribution/contribution-story.md`
 
@@ -8,10 +8,9 @@ format criteria grade exactly that. Your course repo link is the whole submissio
 files and no evidence uploads are part of Assignment 5.
 
 **Contribution Number:** [1]
-**Student:** [Student name]
-**GitHub Username:** [your GitHub username, exactly as it appears on your profile - no @, no
-profile URL. Your comments upstream are identified by this name.]
-**Issue:** [GitHub issue link]
+**Student:** Aamir Khan
+**GitHub Username:** Akhan521
+**Issue:** https://github.com/catalyst-cooperative/pudl/issues/5566
 **Pull Request:** [GitHub PR link, once opened]
 
 One repository, built across units 5 to 8, telling the whole story of your real
@@ -79,24 +78,16 @@ drafted, what you did with the draft.]
 
 ## Why I Chose This Issue
 
-[1-2 paragraphs in your own words: how you searched, what your scan
-surfaced, what your scout's verdict said, why this issue fits your
-profile, and what you hope to learn. If your scout's verdict on it
-was reject and you chose it anyway, say so here and say why; choosing
-against your own tool silently is what loses points. Close with an
-honest read of the tool itself: where the scout fell short on a real
-wild search and what you changed or would change, or what convinced
-you it held up. **Record the link to your claim comment in this section too.**
-Not claimed yet? Write `claim pending` and today's date where the link goes,
-and add the link the moment your claim lands.]
+None of my Unit 5 picks survived this week. My scout accepted my lead, opensearch-benchmark#714, again after this week's scope patch, with an "ambitious" difficulty note, but reading the code showed it wasn't the rename the thread suggested: the transform runners still call Elasticsearch's API and the workload sends an Elasticsearch-format request, so the fix was a port across two repos. My two backups, galaxy#16079 and mahout#1507, both got pull requests this week, and my regrade rejected both on `not-claimed`. A fresh GitHub scan accepted 4 of 5 issues, but each had a blocker my rubric can't see, so I screened the Issue Selection site itself with my rubric's rules: every AI/ML and Python issue on it (2,517), dropping anything assigned, with an open or merged PR, or with any claim comment, and then had the scout grade the best two dozen. It accepted catalyst-cooperative/pudl#5566 with a "moderate" difficulty note, passing every required check and all three preferred ones. PUDL is Catalyst Cooperative's open pipeline for US energy data, built on Dagster and dbt, which is close to the production data platform work I do at Tatari. The issue adds dbt checks that each total on a rural electric co-op's balance sheet (USDA RUS Form 7) equals the sum of its line items, which is data-quality testing on a real pipeline and the same skill as the evals work I want to get better at. I also picked it because it's the most likely to land: all four sibling issues under the same umbrella issue (#5154) were finished by outside contributors and merged within 11 to 20 days, and the work left is about three test blocks, since the schema already checks two totals and the test macro already supports subtraction. I want to learn how a real data team designs its validation tests and how to work through a maintainer's review.
+
+My scout held up on the calls that mattered: it rejected galaxy and mahout the day their pull requests appeared, caught an open PR on zulip#33413 that my own screening script missed, and noticed that Phoenix's "good student issue" label is reserved for another course. It fell short in four ways. Its "ambitious" note on #714 couldn't tell me the fix was a two-repo port; only reading the code did. It can't tell when an issue is already fixed on `main` (the third time this has come up), or when a repo only accepts pull requests from approved contributors or after a maintainer says yes. And it grades the whole issue, so it rejected cpython#133049 even though maintainers had agreed on half of it. The scope patch helped me compare accepts instead of treating them as equal, but "ambitious" now covers both "one open question" and "a port across two repos", which are very different amounts of work. Claim comment: https://github.com/catalyst-cooperative/pudl/issues/5566#issuecomment-6380898918
 
 **Toolkit**
 
-- Tool: issue-scout (your scout: your search strategy, your rubric),
-  and how you used it
-- What it produced: [the scan and its verdict on this issue, described]
-- Difficulties: [where it fell short, or "none met" if none did]
-- What changed: [what you patched or would update, or "nothing"]
+- Tool: issue-scout, my search strategy, rubric, and fit profile. I ran one scan of GitHub and graded about two dozen issues in direct mode (`claude -p "issue-scout: grade <URLs>"`), most of them picks from my own screen of the Issue Selection site.
+- What it produced: for pudl#5566, accept with every required check passing, 3 of 3 preferred checks, and a "moderate" difficulty note. It also noted that the maintainers assign the issue from a comment, and that PUDL's LLM policy asks for a short note in the PR on how AI was used.
+- Difficulties: it accepted #714 without seeing how big the port was, and it has no check for a fix already on `main`, contribution gates (approved-contributor lists, a maintainer go-ahead, labels held for another course), or a settled half inside a disputed issue. `no-abandoned-history` also never says how many closed PRs count as "several".
+- What changed: I applied the scope patch. I replaced my `single-bounded-goal` check with `scope-feasible`, which only fails an issue that isn't one piece of work, and added a difficulty note (straightforward, moderate, or ambitious) to each accept. I also changed the verdict rule to "every check weighted required" instead of a hand-copied list of names, so renaming a row can't silently drop it. My Unit 1 eval still agreed 7 of 7 with the gold labels on every scope item plus two canaries. Next, I'd add checks for "still needed on `main`" and for contribution gates, and put a number on "several" closed PRs.
 
 ---
 

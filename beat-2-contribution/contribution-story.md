@@ -58,11 +58,9 @@ one in the week it belongs to.
 
 issue-scout is a Claude Code skill that searches GitHub with queries I wrote, ranks the results with my own filters, and grades the top five against my Unit 1 rubric; I aimed its queries at the orgs I care about (LLM evals, agents, ML tools, data tools) because keyword searches like "llm" mostly found tiny personal projects. My first scan only accepted 1 of its top 5 issues, because the other 4 already had someone's pull request open, and my rubric also missed an issue that someone was already fixing in their own fork. I fixed this by filtering out issues with linked pull requests, searching for labeled bugs and preferring issues that are a few months old, and updating two rubric checks, and my Unit 1 eval still scored 20/20 afterward. My second scan accepted all 5 with no pull request conflicts, but each one still had a problem my rubric can't see yet, like needing a GPU or only taking pull requests from approved contributors.
 
-**Unit 6: [one line on the tool work]**
+**Unit 6: Installed the voice guard with an upstream section, fixed how my skills find my guide, and wrote a scoped memory file for PUDL**
 
-[2-4 sentences: the voice-guard, the repo-memory file. What broke or
-fell short, and what changed because of it. "Nothing broke" counts when
-it is true - say how you know.]
+I added an Upstream section to my voice guide with rules for claims, questions, and pings, moved the guide to one home that the voice guard and my three earlier skills all read, and installed the guard as a hook; it stopped the `--help` wiring test, and then passed my real claim on pudl#5566 on its way out. Two things broke: first, repro-check kept saying it couldn't find my voice guide, because Claude Code's Glob tool doesn't see the symlinks the install creates, so I replaced them with the install guide's one-line pointer files. Second, my new rule asking for a report-back time like "this week" clashed with my Unit 2 rubric, which failed that phrase as a deadline in one run and passed it in another, so I reworded the rule to allow a report-back point tied to finishing my first step. For PUDL's memory file I left out the `AGENTS.md` import, since the repo's `CLAUDE.md` already points to it, and ran one orientation pass over just the RUS 7 dbt files; that pass showed me the tests pick rows by `asset_type` rather than `is_total`, and that `error_if` is an allowance for known failures, all in 55 lines kept out of git with `.git/info/exclude`.
 
 **Unit 7: [one line on the tool work]**
 

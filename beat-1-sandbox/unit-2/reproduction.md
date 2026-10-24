@@ -104,7 +104,11 @@ fields.
 2. Full run 1: **18/20**. Misses: pkg-03 and pkg-05, both false rejects.
 3. `--only` re-run of the two misses plus canaries, after revising two checks: **7/7** scored.
 4. Full run 2: **20/20**, every category matched.
-5. Full run 3, after revising the rubric on grader feedback, saved as `eval-run.txt`: **20/20**, every category matched.
+5. Full run 3, after revising the rubric on grader feedback: **20/20**, every category matched.
+6. 2026-10-24, after narrowing `claim-promises-honestly` so a rough time for reporting back on my own next step is not a deadline (only a date for delivering a fix or PR is): `--only` pkg-19, pkg-01, pkg-04, pkg-13 agreed **4/4**. pkg-19, which promises a fix "within 2 days guaranteed", still fails the check.
+7. Full run 4: **19/20**, every category matched. The miss, pkg-09 (a false reject on `outcome-honest` and `control-run`, which this change did not touch), matched gold in run 3 and in two `--only` re-runs, so the flip came from the rubric leaving room for two readings, not from this change.
+8. The cause: `outcome-honest` names "ran it ten times" as certainty standing in for evidence, and pkg-09's "I ran this 5 times", next to the one transcript it shows, looked like that example to the grader in one of four tries. I added that a repetition count or a labeled hypothesis about what differed is not a central claim when a shown run already backs the result, and a count fails only when it stands in for a missing artifact. `--only` pkg-09 agreed **3/3**; pkg-13 ("guaranteed", no artifacts) and pkg-17 still fail `outcome-honest`.
+9. Full run 5, saved as `eval-run.txt`: **20/20**, every category matched.
 
 **Package analysis**
 

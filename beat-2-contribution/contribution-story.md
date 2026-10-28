@@ -11,7 +11,7 @@ files and no evidence uploads are part of Assignment 5.
 **Student:** Aamir Khan
 **GitHub Username:** Akhan521
 **Issue:** https://github.com/catalyst-cooperative/pudl/issues/5566
-**Pull Request:** [GitHub PR link, once opened]
+**Pull Request:** https://github.com/catalyst-cooperative/pudl/pull/5729
 
 One repository, built across units 5 to 8, telling the whole story of your real
 contribution. Fill it as you work, not at the end — the sections below ask for evidence that
@@ -345,27 +345,23 @@ Wrote the ship manifest from `AGENTS.md`'s checklist. The first gate run rejecte
 
 ## Pull Request
 
-**PR Link:** [GitHub PR URL when opened]
+**PR Link:** https://github.com/catalyst-cooperative/pudl/pull/5729 (draft, opened 2026-10-27)
 
-**PR Description:** [what the PR says; much of the content above
-adapts into it]
+**PR Description:** It follows PUDL's PR template and answers every item, with N/A and a reason where one doesn't apply. It closes #5566 and explains the two parts of the change: the column-map fix that restores line 6, and the three new tests. It says what changed from my posted plan (no `error_if`) and notes that RUS 12 has the same typo, which I left for #5522. The Testing section shows the before and after dbt output (line 14 `FAIL 1782` → `PASS=8`), my check script and its output, the row comparison, and the repo checks' results. The AI use section reads: "I talked through the plan with Claude Code, then had it write the check script, make the edits, and run the rebuild and validations. I reviewed the diff and the before/after numbers myself." After opening it, I added a commit putting the PR number in both release notes.
 
 **Maintainer Feedback:**
 
-- [Date]: [feedback received, or "none yet"; silence is a normal
-  state and costs you nothing]
-- [Date]: [how you addressed it]
+- 2026-10-27: none yet on the PR. Before it, e-belfer answered my plan's question on the issue: "Good catch - let's consider that fix to be in scope of this PR."
+- 2026-10-27: I fixed the typo in this PR and posted an update on the issue before opening it, since the fix closed every gap and the planned `error_if` wasn't needed.
 
-**Status:** [Awaiting review / Iterating / Merged / Closed. The
-status is a fact you record, never a grade: the PR is graded as
-opened.]
+**Status:** Awaiting review. It's a draft until I run `pytest-ci`, then I'll mark it ready and tag `@catalyst-cooperative/com-dev`.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: the ship-gate, a hook on `gh pr create` that runs my manifest's four PUDL checks and then my Unit 4 pr-precheck on the branch, plan, evidence, and description. I ran it by hand three times before the hook let the PR through.
+- What it produced: run 1 passed every repo check, then rejected on `diff-clean` [unclear]. Runs 2 and 3 passed every check, with voice-guide findings: a plan change not posted on the issue, repo-check results without output, and output I hadn't run myself.
+- Difficulties: the gate diffs against my local `main`, which was six commits behind upstream, so run 1 was spent on a stale base. The hook checks the folder the `claude` session started in, so I had to open the PR from a session inside my clone. My rubric is also silent on a release-note `:pr:` number, which can't exist before the PR does.
+- What changed: I fast-forwarded `main`, posted the plan update on the issue, added the check results to the description, and reran the checks myself. The rubric stayed as it was, since the one reject was a setup problem. Next, I'd add a line to `repo-asks-met` saying a reference that can only exist after the PR opens passes when the plan says it will follow.
 
 ---
 

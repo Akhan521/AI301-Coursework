@@ -298,39 +298,48 @@ Deviations:
 
 ## Testing Strategy
 
-[What observable checks prove the fix: your reproduction steps re-run
-against the built change (before and after), and the repo's own test
-suite or checks with the outcome shown. "Tests pass" with nothing
-observable named is not a strategy.]
+Four checks, each run before the fix (PUDL's 2026-10-24 nightly data) and after it (both tables rebuilt on my branch, which `AGENTS.md` says is the only build validation results are reliable on):
+
+1. **My reproduction script.** Line 6 went from 0 rows to 8,483, and line 14's gaps from 1,782 to 0. Lines 5 and 29 stayed at 0, on both tables.
+2. **The new dbt tests fail without the fix.** On the nightly data, the new line 14 test fails with exactly 1,782 rows. On the rebuilt tables, all 8 tests pass on both tables (`PASS=8 WARN=0 ERROR=0`). There's no Python to unit-test here, so these tests are the ones that pin the fix.
+3. **The fix only adds rows.** Compared column by column with the nightly data, each table gains 8,483 line 6 rows, and none of the existing 237,524 rows changes. The 8 negative line 6 values match the 8 gaps that went the other way.
+4. **PUDL's own checks**, from `AGENTS.md`'s PR checklist: `prek-run`, `pytest-unit` (1,307 passed), `pytest-integration` (791 passed), `pyrefly-check` (0 errors), and `docs-check`. All passed through the ship-gate.
+
+The full output is in the PR. Not run yet: `pytest-ci`, the 45-60 minute fast ETL, which the PR template asks for "when you think the PR is done", so I'll run it before marking the draft ready.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: the ship-gate's manifest, which lists PUDL's own pre-PR checks. I tested each row in a stripped-down shell before letting the gate run them, alongside my check script and `dbt_helper validate`.
+- What it produced: four rows from `AGENTS.md`'s checklist, all passing in about 3 minutes, plus a dated exclusion for `pytest-ci`.
+- Difficulties: every row needed my `env.sh` loaded, because the gate runs each row in a fresh shell. `AGENTS.md` and the PR template disagree on `pytest-ci`. My Unit 6 logs only had the before validation for the `core_` table.
+- What changed: I based the `pytest-ci` exclusion on the PR template's wording, and ran the missing `out_` before-validation. I also reran the unit tests and the row comparison, so every number comes from the final commit.
 
 ---
 
 ## Implementation Notes
 
-[A running log, added to as you work. Date each entry. What you
-built, decisions you made when you made them, wrong turns included.]
+**2026-10-26**
 
-**[Date]**
+Posted my plan on the issue through the voice guard, with one question: fix the line 6 typo here or in a separate issue. I leaned toward a separate issue, since the issue keeps fixes out of scope.
 
-[Entry]
+**2026-10-27 (morning)**
 
-**[Date]**
+e-belfer put the fix in scope. I updated `plan.md` to fix the typo and rebuild the tables on my branch, since checking the fix against nightly data would prove nothing.
 
-[Entry]
+**2026-10-27 (build)**
+
+Renamed the column-map cell on a branch from `upstream/main` and rebuilt the tables. My first `dg launch` failed with `DagsterInvalidSubsetError`, because `core_rus7__entity_borrowers` is built in the same step as a forensics asset, so I added that asset to the selection. My check script then showed 0 line 14 gaps, so I dropped the planned `error_if`; the 8 reverse gaps were negative line 6 values. I added the three tests, regenerated the schemas and row counts, wrote two release notes, and committed in two steps: the fix, then the tests.
+
+**2026-10-27 (ship-gate and PR)**
+
+Wrote the ship manifest from `AGENTS.md`'s checklist. The first gate run rejected because my local `main` was six commits behind upstream; after I fast-forwarded it, the gate passed. I posted a short update on the issue about the dropped `error_if`, reran the checks myself, and opened draft PR #5729. A third commit added the PR number to the release notes. `pytest-ci` waits until I mark the draft ready, as the PR template asks.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: Claude Code in my PUDL clone with `CLAUDE.local.md`, running PUDL's own tools (`pudl_datastore`, `dg launch`, `dbt_helper`). I approved each commit message before anything was committed.
+- What it produced: three commits across 7 files, and the before/after evidence for both tables.
+- Difficulties: the Dagster subset error, and every command needing `env.sh`, because dbt's `env_var()` ignores `.env`. A few evidence numbers first came from older notes rather than runs on the final commit.
+- What changed: the rebuild selection, recorded as a deviation, and rerunning every evidence number on the final commit.
 
 ---
 

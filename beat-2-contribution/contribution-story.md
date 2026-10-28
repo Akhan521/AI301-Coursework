@@ -93,26 +93,29 @@ My scout held up on the calls that mattered: it rejected galaxy and mahout the d
 
 **Problem Description**
 
-[In your own words, what is broken or missing?]
+PUDL publishes the asset side of each rural electric co-op's RUS Form 7 balance sheet in two tables, `core_rus7__yearly_balance_sheet_assets` and `out_rus7__yearly_balance_sheet_assets`, one row per borrower, year, and line. The form has five asset totals, but the tables' dbt schema only checked two of them (`total_utility_plant` and `total_current_and_accrued`) against the sum of their lines. The other three, net utility plant (line 5), total other property and investments (line 14), and total assets (line 29), had no test, so a total that didn't add up would get published without anyone noticing. The issue, one of five under the umbrella #5154, asks for a `subcomponents_sum_to_total` test on each missing total.
 
 **Expected Behavior**
 
-[What should happen?]
+Every asset total on Part C of the form is checked against the sum of its lines, within the $10 tolerance the existing tests use, on both tables. A total that misses by more than its allowance fails the dbt run.
 
 **Current Behavior**
 
-[What actually happens?]
+Both tables pass all five existing tests, but only two of those check totals. When I checked the other three myself, lines 5 and 29 matched for every one of the 8,483 borrower-years, but line 14 missed for 1,782 of them. Most of that turned out to be a real bug and not bad reported data: line 6, "Non-Utility Property (Net)", never reaches either table, so line 14's lines are short by that amount.
 
 **Affected Components**
 
-[Which parts of the codebase are involved?]
+- `dbt/schema_inputs/rus7/core_rus7__yearly_balance_sheet_assets/schema.human.yml` and the `out_` one: where the tests are written. The `dbt/models/rus7/.../schema.yml` files are generated from them with `dbt_helper update-tables`.
+- `dbt/macros/expect_subcomponents_sum_to_total.sql`: the test macro, used as it is. It already supports subtracted lines (`negative_subcomponents_list`), which line 5 needs.
+- `src/pudl/package_data/rus7/column_maps/balance_sheet.csv` and `src/pudl/transform/rus7.py:51`: the column map names line 6 `non_utility_property_asset`, and the transform only keeps columns ending in `_assets`.
+- `dbt/seeds/etl_full_row_counts.csv` (expected row counts per table and year) and `docs/release_notes.rst`.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: Claude Code in my PUDL clone, with the repo's `AGENTS.md` and my own `CLAUDE.local.md` from Unit 6 loaded. I used it to read the RUS 7 dbt files, the transform, and the blank RUS 7 forms in `docs/data_sources/rus7/`.
+- What it produced: a map of where the tests live and how they're built: edit the human schema files and regenerate, tests pick rows by their `asset_type` label, and `error_if` is an allowance for known failures. It also gave me the Part C formulas for the three missing totals, read off the 2014 and pre-2014 forms, which agree.
+- Difficulties: my claim said I'd find the totals from the table's `is_total` rows, but `is_total` only marks names starting with `total_`, so `net_utility_plant` and `total` aren't flagged even though they're totals on the form. Going by the flag would have missed two of the three.
+- What changed: I took the formulas from the blank forms instead of the flag, and recorded the `is_total` rule in `CLAUDE.local.md`.
 
 ---
 
@@ -261,29 +264,35 @@ if __name__ == "__main__":
 
 **Analysis**
 
-[Your analysis of the root cause: what is causing the issue, traced
-to the files and functions involved.]
+Two causes. First, the gap the issue names: each table's `schema.human.yml` has only two `subcomponents_sum_to_total` tests, so three of the five Part C totals are never checked. Second, the line 14 mismatch from my reproduction: the column map (`src/pudl/package_data/rus7/column_maps/balance_sheet.csv`) names line 6 `non_utility_property_asset`, with no final "s", and the transform (`src/pudl/transform/rus7.py:51`) only keeps columns ending in `_assets`, so line 6 is dropped before either table is written, and has been since the first RUS 7 extraction (#4906). The `asset_type` enum already lists `non_utility_property`, so the name is the only thing wrong.
 
 **Proposed Solution**
 
-[High-level description of your fix approach, and what you are
-deliberately NOT changing.]
+After e-belfer put the typo fix in scope ("let's consider that fix to be in scope of this PR"), the PR renames that one header cell and adds a test for each missing total to both tables, in the same shape as the existing two. Not changing: reported values that don't add up (out of scope per the issue), the liabilities table, the `is_total` flag, the test macro, and RUS 12's identical typo, which I mention in the PR for #5522.
 
 **Implementation Plan**
 
-1. [Modify file X to do Y]
-2. [Add or change Z]
-3. [Update tests]
+1. Rename column 11 of the column map to `non_utility_property_assets`.
+2. Rebuild both tables on the branch from the raw RUS 7 data, as `AGENTS.md` asks.
+3. Rerun my check script; any line 14 gaps left set its `error_if`.
+4. Add the three tests to both `schema.human.yml` files, using the Part C formulas.
+5. Regenerate the schemas and expected row counts with `dbt_helper update-tables`.
+6. Validate both tables: all 8 tests should pass.
+7. Add release notes with the issue and PR numbers.
+8. Run PUDL's pre-PR checks, then `pytest-ci` before marking the draft ready.
 
-[Record deviations here as they happen: what changed mid-build and
-why. A recorded deviation is honest work; silent drift is not.]
+Deviations:
+
+- No `error_if`: the posted plan gave line 14 one of 1,782, but with the fix in, 0 gaps were left. I said so on the issue before opening the PR.
+- Step 2 needed `_core_rus7__forensics_entity_resolution_borrowers` in the selection too, because it's built together with `core_rus7__entity_borrowers`.
+- Two release-note entries instead of one, one under each heading; `pyrefly-check` added to step 8 from `AGENTS.md`'s checklist.
 
 **Toolkit**
 
-- Tool:
-- What it produced:
-- Difficulties:
-- What changed:
+- Tool: plan-check, my Unit 3 rubric with the scope for real repos. It graded `plan.md` and `plan-comment.md` together four times before I posted the comment through the voice guard.
+- What it produced: a reject, then three accepts with every check passing. The reject was on `claims-backed`: my plan said the line 14 test would "start passing once line 6 flows through", which nothing I'd run showed. It also checked my file and line citations against `main` and caught a missing `pytest-ci`.
+- Difficulties: its diagnosis checks assume a bug with a trigger, and this issue is a missing validation, so it graded the plan's own causes instead.
+- What changed: I cut the unsupported claim and added `pytest-ci`. Later, plan-check needs diagnosis checks for validation and feature issues.
 
 ---
 

@@ -62,10 +62,9 @@ issue-scout is a Claude Code skill that searches GitHub with queries I wrote, ra
 
 I added an Upstream section to my voice guide with rules for claims, questions, and pings, moved the guide to one home that the voice guard and my three earlier skills all read, and installed the guard as a hook; it stopped the `--help` wiring test, and then passed my real claim on pudl#5566 on its way out. Two things broke: first, repro-check kept saying it couldn't find my voice guide, because Claude Code's Glob tool doesn't see the symlinks the install creates, so I replaced them with the install guide's one-line pointer files. Second, my new rule asking for a report-back time like "this week" clashed with my Unit 2 rubric, which failed that phrase as a deadline in one run and passed it in another, so I reworded the rule to allow a report-back point tied to finishing my first step. For PUDL's memory file I left out the `AGENTS.md` import, since the repo's `CLAUDE.md` already points to it, and ran one orientation pass over just the RUS 7 dbt files; that pass showed me the tests pick rows by `asset_type` rather than `is_total`, and that `error_if` is an allowance for known failures, all in 55 lines kept out of git with `.git/info/exclude`.
 
-**Unit 7: [one line on the tool work]**
+**Unit 7: Installed the ship-gate, wrote PUDL's manifest from its PR checklist, and passed it on my real branch**
 
-[2-4 sentences: the ship-gate and your gate manifest. What it produced
-on your real branch, what fought you, what changed because of it.]
+My manifest runs the four checks in PUDL's `AGENTS.md` PR checklist, each loading my `env.sh` because the gate runs every row in a fresh shell, and leaves out `pytest-ci`, which the PR template only asks for when the PR is done. The first run rejected my branch on `diff-clean` because my local `main` was six commits behind upstream, so pr-precheck saw 85 changed files instead of my 7; fast-forwarding `main` fixed it without touching my branch or my rubric. The passing runs still flagged three voice-guide problems, so I posted the plan change on the issue, added the check results to my description, and reran the checks myself before opening the PR. What confused me was that the hook checks the folder the `claude` session started in, so I had to open PR #5729 from a session inside my clone.
 
 **Unit 8: [one line on the tool work]**
 

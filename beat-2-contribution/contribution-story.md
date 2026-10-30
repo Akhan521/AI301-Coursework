@@ -352,7 +352,7 @@ Austen approved #5729, and it merged that afternoon through auto-merge. She said
 
 ## Pull Request
 
-**PR Link:** https://github.com/catalyst-cooperative/pudl/pull/5729 (opened as a draft 2026-10-27, marked ready 2026-10-29, approved 2026-10-30)
+**PR Link:** https://github.com/catalyst-cooperative/pudl/pull/5729 (opened as a draft 2026-10-27, marked ready 2026-10-29, approved and merged 2026-10-30)
 
 **PR Description:** It follows PUDL's PR template and answers every item, with N/A and a reason where one doesn't apply. It closes #5566 and explains the two parts of the change: the column-map fix that restores line 6, and the three new tests. It says what changed from my posted plan (no `error_if`) and notes that RUS 12 has the same typo, which I left for #5522. The Testing section shows the before and after dbt output (line 14 `FAIL 1782` → `PASS=8`), my check script and its output, the row comparison, and the repo checks' results. The AI use section reads: "I talked through the plan with Claude Code, then had it write the check script, make the edits, and run the rebuild and validations. I reviewed the diff and the before/after numbers myself." After opening it, I added a commit putting the PR number in both release notes, and after review, one removing the two existing tests' `error_if` allowances.
 
@@ -365,15 +365,17 @@ Austen approved #5729, and it merged that afternoon through auto-merge. She said
 - 2026-10-29: she replied, "If they have 0 errors you can go ahead an remove the `error_if` statements in this PR!" I removed them, merged `main` to clear a release-notes conflict, and reran `pytest-ci`.
 - 2026-10-30: Austen offered me another issue and approved the PR, then updated the branch with `main`.
 - 2026-10-30: I thanked her and, following up on her suggestion, offered to fix the RUS 12 typo next, asking whether to open a small issue first or go straight to a PR.
+- 2026-10-30: she replied, "you can just make a PR for it! No issue needed," and turned on auto-merge. #5729 merged that afternoon.
+- 2026-10-30: I opened the RUS 12 follow-up as https://github.com/catalyst-cooperative/pudl/pull/5737, ready for review.
 
-**Status:** Approved, awaiting merge. I marked it ready on 2026-10-29, after `pytest-ci` passed on the latest commit, and Austen approved it on 2026-10-30. The merge is up to the maintainers: they still need to run CI on it and add it to the merge queue.
+**Status:** Merged on 2026-10-30, through Austen's auto-merge once CI passed. The RUS 12 follow-up, #5737, is open and awaiting review.
 
 **Toolkit**
 
 - Tool: the ship-gate, a hook on `gh pr create` that runs my manifest's four PUDL checks and then my Unit 4 pr-precheck on the branch, plan, evidence, and description. I ran it by hand three times before the hook let the PR through.
 - What it produced: run 1 passed every repo check, then rejected on `diff-clean` [unclear]. Runs 2 and 3 passed every check, with voice-guide findings: a plan change not posted on the issue, repo-check results without output, and output I hadn't run myself.
 - Difficulties: the gate diffs against my local `main`, which was six commits behind upstream, so run 1 was spent on a stale base. The hook checks the folder the `claude` session started in, so I had to open the PR from a session inside my clone. My rubric is also silent on a release-note `:pr:` number, which can't exist before the PR does.
-- What changed: I fast-forwarded `main`, posted the plan update on the issue, added the check results to the description, and reran the checks myself. The rubric stayed as it was, since the one reject was a setup problem. Next, I'd add a line to `repo-asks-met` saying a reference that can only exist after the PR opens passes when the plan says it will follow.
+- What changed: I fast-forwarded `main`, posted the plan update on the issue, added the check results to the description, and reran the checks myself. For #5729 the rubric stayed as it was, since its one reject was a setup problem. On #5737 the gate also failed `repo-asks-met` for naming no issue, which PUDL doesn't require, so I changed that check and reran my Unit 4 eval (20/20). Still open: the rubric doesn't say how to grade a `:pr:` number that can only exist after the PR opens.
 
 ---
 

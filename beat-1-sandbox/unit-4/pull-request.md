@@ -32,7 +32,8 @@ fields.
 2. `--only pkg-05,pkg-04,pkg-07,pkg-14,calib-04 --include-calibration`, after revising `fix-observed`: **4/4** scored agree, and calib-04 still rejected. pkg-05 flipped to accept; the three not-tested canaries and calib-04 still rejected on `fix-observed`.
 3. Full run 2: **18/20** (bar PASS, every category matched). Two clear accepts that passed in run 1 flipped: pkg-11 `failed: description-matches-diff` and pkg-13 `failed: fix-observed`.
 4. `--only pkg-11,pkg-13,pkg-03,pkg-17,calib-03 --include-calibration`, after fixing both checks: **4/4** scored agree, and calib-03 still rejected. pkg-11 and pkg-13 accepted; the silent-drift canaries pkg-03 and pkg-17 and calib-03 still rejected on `description-matches-diff`.
-5. Full run 3, the confirming run committed in `eval-run.txt`: **20/20** scored items (bar PASS), `categories: clear-accept 7/7  not-tested 4/4  silent-drift 4/4  standards-wall 2/2  unreviewable 3/3`.
+5. Full run 3, the confirming run: **20/20** scored items (bar PASS), `categories: clear-accept 7/7  not-tested 4/4  silent-drift 4/4  standards-wall 2/2  unreviewable 3/3`.
+6. 2026-10-30, after the ship-gate rejected my real follow-up PR to pudl#5729 on `repo-asks-met`: the check required the description to name an issue "whatever the repo states", a rule carried over from Path Review's one-issue-per-PR house rules. PUDL's checklist asks for the closing issue only "if applicable", and the maintainer said the follow-up needed no issue. `repo-asks-met` now also passes a description that says there is no issue and points to where a maintainer asked for or agreed to the change. Full run 4, saved as `eval-run.txt`: **20/20**, every category matched; pkg-01, whose gold note includes the missing `closes #xxxx`, still rejects.
 
 **Package analysis**
 

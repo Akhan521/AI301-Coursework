@@ -1,33 +1,33 @@
-# eval run written by run_eval.py at 2026-10-10T05:33:35Z
+# eval run written by run_eval.py at 2026-10-30T21:48:16Z
 # model: sonnet (pinned)
 # graded: /Users/aamirkhan/.claude/skills/pr-precheck
 # packages: 20 scored
 #   SKILL.md  sha256:f6609771d7d877ec
-#   rubric.md  sha256:01930ff7ef26726e
+#   rubric.md  sha256:993de2543d87294b
 #   procedure.md  sha256:4d6b328985efef6b
 #   evidence-guide.md  sha256:b514c689e4f1b302
 #
 grading 20 package(s) with the tool at /Users/aamirkhan/.claude/skills/pr-precheck, model sonnet, 5 worker(s)...
-  pkg-05: accept
   pkg-03: reject
   pkg-01: reject
   pkg-02: accept
+  pkg-05: accept
   pkg-04: reject
-  pkg-08: accept
-  pkg-07: reject
-  pkg-06: reject
   pkg-10: reject
   pkg-09: reject
-  pkg-12: reject
-  pkg-11: accept
+  pkg-07: reject
+  pkg-08: accept
+  pkg-06: reject
   pkg-13: accept
-  pkg-14: reject
   pkg-15: reject
+  pkg-11: accept
+  pkg-12: reject
+  pkg-14: reject
+  pkg-19: accept
+  pkg-16: accept
+  pkg-20: reject
   pkg-17: reject
   pkg-18: reject
-  pkg-16: accept
-  pkg-19: accept
-  pkg-20: reject
 
 item    category        gold    verdict  agree  note
 pkg-01  standards-wall  reject  reject   yes    

@@ -348,16 +348,19 @@ Austen Sharpe (aesharpe) asked me to add tests for `total_utility_plant` and `to
 
 ## Pull Request
 
-**PR Link:** https://github.com/catalyst-cooperative/pudl/pull/5729 (draft, opened 2026-10-27)
+**PR Link:** https://github.com/catalyst-cooperative/pudl/pull/5729 (opened as a draft 2026-10-27, marked ready 2026-10-29)
 
-**PR Description:** It follows PUDL's PR template and answers every item, with N/A and a reason where one doesn't apply. It closes #5566 and explains the two parts of the change: the column-map fix that restores line 6, and the three new tests. It says what changed from my posted plan (no `error_if`) and notes that RUS 12 has the same typo, which I left for #5522. The Testing section shows the before and after dbt output (line 14 `FAIL 1782` → `PASS=8`), my check script and its output, the row comparison, and the repo checks' results. The AI use section reads: "I talked through the plan with Claude Code, then had it write the check script, make the edits, and run the rebuild and validations. I reviewed the diff and the before/after numbers myself." After opening it, I added a commit putting the PR number in both release notes.
+**PR Description:** It follows PUDL's PR template and answers every item, with N/A and a reason where one doesn't apply. It closes #5566 and explains the two parts of the change: the column-map fix that restores line 6, and the three new tests. It says what changed from my posted plan (no `error_if`) and notes that RUS 12 has the same typo, which I left for #5522. The Testing section shows the before and after dbt output (line 14 `FAIL 1782` → `PASS=8`), my check script and its output, the row comparison, and the repo checks' results. The AI use section reads: "I talked through the plan with Claude Code, then had it write the check script, make the edits, and run the rebuild and validations. I reviewed the diff and the before/after numbers myself." After opening it, I added a commit putting the PR number in both release notes, and after review, one removing the two existing tests' `error_if` allowances.
 
 **Maintainer Feedback:**
 
-- 2026-10-27: none yet on the PR. Before it, e-belfer answered my plan's question on the issue: "Good catch - let's consider that fix to be in scope of this PR."
+- 2026-10-27: on the issue, e-belfer answered my plan's question: "Good catch - let's consider that fix to be in scope of this PR."
 - 2026-10-27: I fixed the typo in this PR and posted an update on the issue before opening it, since the fix closed every gap and the planned `error_if` wasn't needed.
+- 2026-10-28: Austen Sharpe (aesharpe) asked for tests on `total_utility_plant` and `total_current_and_accrued`, and invited a separate PR for the RUS 12 typo.
+- 2026-10-28: I pointed out that both tests already exist on `main`, asked whether to remove their unused `error_if` allowances, and said I'd open the RUS 12 PR separately.
+- 2026-10-29: she replied, "If they have 0 errors you can go ahead an remove the `error_if` statements in this PR!" I removed them, merged `main` to clear a release-notes conflict, and reran `pytest-ci`.
 
-**Status:** Awaiting review. It's a draft until I run `pytest-ci`, then I'll mark it ready and tag `@catalyst-cooperative/com-dev`.
+**Status:** Awaiting review. I marked it ready on 2026-10-29, after `pytest-ci` passed on the latest commit, and tagged Austen and `@catalyst-cooperative/com-dev`.
 
 **Toolkit**
 

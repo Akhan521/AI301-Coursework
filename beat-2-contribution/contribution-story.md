@@ -333,10 +333,14 @@ Renamed the column-map cell on a branch from `upstream/main` and rebuilt the tab
 
 Wrote the ship manifest from `AGENTS.md`'s checklist. The first gate run rejected because my local `main` was six commits behind upstream; after I fast-forwarded it, the gate passed. I posted a short update on the issue about the dropped `error_if`, reran the checks myself, and opened draft PR #5729. A third commit added the PR number to the release notes. `pytest-ci` waits until I mark the draft ready, as the PR template asks.
 
+**2026-10-28 to 2026-10-29 (review)**
+
+Austen Sharpe (aesharpe) asked me to add tests for `total_utility_plant` and `total_current_and_accrued`, but both were already on `main`, just outside the diff. I pointed her to them and asked whether to drop their `error_if` allowances, since both now have 0 failures. While I waited, `pytest-ci` passed on the draft, and the next morning she said yes. By then GitHub showed a conflict: #5676 had added a release note in the same spot and moved the dbt folders, so I merged `main` and kept both entries. I removed the two allowances, revalidated both tables (8 of 8 each), reran `pytest-ci` on the new head, and marked the PR ready, tagging Austen and com-dev.
+
 **Toolkit**
 
 - Tool: Claude Code in my PUDL clone with `CLAUDE.local.md`, running PUDL's own tools (`pudl_datastore`, `dg launch`, `dbt_helper`). I approved each commit message before anything was committed.
-- What it produced: three commits across 7 files, and the before/after evidence for both tables.
+- What it produced: four commits plus a merge of `main`, still 7 files, and the before/after evidence for both tables.
 - Difficulties: the Dagster subset error, and every command needing `env.sh`, because dbt's `env_var()` ignores `.env`. A few evidence numbers first came from older notes rather than runs on the final commit.
 - What changed: the rebuild selection, recorded as a deviation, and rerunning every evidence number on the final commit.
 

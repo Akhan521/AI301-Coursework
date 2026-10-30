@@ -337,6 +337,10 @@ Wrote the ship manifest from `AGENTS.md`'s checklist. The first gate run rejecte
 
 Austen Sharpe (aesharpe) asked me to add tests for `total_utility_plant` and `total_current_and_accrued`, but both were already on `main`, just outside the diff. I pointed her to them and asked whether to drop their `error_if` allowances, since both now have 0 failures. While I waited, `pytest-ci` passed on the draft, and the next morning she said yes. By then GitHub showed a conflict: #5676 had added a release note in the same spot and moved the dbt folders, so I merged `main` and kept both entries. I removed the two allowances, revalidated both tables (8 of 8 each), reran `pytest-ci` on the new head, and marked the PR ready, tagging Austen and com-dev.
 
+**2026-10-30 (merge and RUS 12 follow-up)**
+
+Austen approved #5729, and it merged that afternoon through auto-merge. She said the RUS 12 typo could go straight to a PR with no issue, so I branched from `main` and fixed RUS 12's column map and its `asset_type` value, which held the same misspelling. Rebuilt on the branch, line 6 went from 0 rows to 779 and line 14's gaps from 212 of 775 to 0, and each of those gaps equaled the restored line 6 value. Two things needed care: `dbt_helper` also re-sorted an unrelated row-count line, which I reverted, and `pyrefly-check` failed on `main` itself because of another PR, so I moved it to my manifest's excluded table with the reason. After #5729 merged, I rebased onto it, fixed the rubric check the gate exposed, and opened #5737.
+
 **Toolkit**
 
 - Tool: Claude Code in my PUDL clone with `CLAUDE.local.md`, running PUDL's own tools (`pudl_datastore`, `dg launch`, `dbt_helper`). I approved each commit message before anything was committed.

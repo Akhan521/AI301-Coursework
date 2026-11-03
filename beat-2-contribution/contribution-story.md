@@ -66,10 +66,9 @@ I added an Upstream section to my voice guide with rules for claims, questions, 
 
 My manifest runs the four checks in PUDL's `AGENTS.md` PR checklist, each loading my `env.sh` because the gate runs every row in a fresh shell, and leaves out `pytest-ci`, which the PR template only asks for when the PR is done. On both of my PRs the first run stopped because my local `main` was behind upstream, so pr-precheck saw upstream's changes mixed into mine; fast-forwarding `main` fixed that, and the passing runs' voice-guide notes led me to post my plan change on the issue, show my check results in the description, and open each PR from a session inside my clone, since the hook checks the folder the session started in. On my RUS 12 follow-up (#5737), `repo-asks-met` also failed, because my rubric required naming an issue "whatever the repo states", a rule carried over from Path Review, while PUDL asks for one only "if applicable" and the maintainer had said no issue was needed. I changed the check to accept a description that says there is no issue and links the maintainer's go-ahead, and my Unit 4 eval still scored 20/20.
 
-**Unit 8: [one line on the tool work]**
+**Unit 8: Installed the PR-monitor, wrote my playbook from PUDL's review data, and patched a gap in the runner**
 
-[2-4 sentences: the PR-monitor and your playbook. What it read, what it
-drafted, what you did with the draft.]
+The PR-monitor reads my PR's live state with read-only `gh` calls and drafts my next move from my playbook, which sets PUDL's nudge threshold at 14 days: across 21 recent outside-contributor PRs the first maintainer reply took about 5 days at the median, and PUDL's maintainer guide aims to respond within a week and to check in on a review that runs past 2 weeks. I had Claude Code subagents attack my first draft from four directions, and they showed it was fitted to my one quiet PR: it had no rule for a maintainer speaking last, a stale label, or a review that grows the scope, and sampling only merged PRs had hidden a 35-day wait, so I rewrote it as general rules plus one dated line per repo. They also found that the monitor never counts time passing as a change, so a PR that crossed my threshold with nothing else new would get "nothing new" instead of a nudge, and I patched my installed copy to count whole weeks of quiet. On #5737 it read 3 quiet days, no reviews and passing checks, and drafted a wait note instead of a nudge, since my threshold isn't met until 2026-11-13, so I posted nothing.
 
 ---
 

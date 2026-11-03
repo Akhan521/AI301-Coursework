@@ -262,7 +262,7 @@ if __name__ == "__main__":
 
 **Analysis**
 
-Two causes. First, the gap the issue names: each table's `schema.human.yml` has only two `subcomponents_sum_to_total` tests, so three of the five Part C totals are never checked. Second, the line 14 mismatch from my reproduction: the column map (`src/pudl/package_data/rus7/column_maps/balance_sheet.csv`) names line 6 `non_utility_property_asset`, with no final "s", and the transform (`src/pudl/transform/rus7.py:51`) only keeps columns ending in `_assets`, so line 6 is dropped before either table is written, and has been since the first RUS 7 extraction (#4906). The `asset_type` enum already lists `non_utility_property`, so the name is the only thing wrong.
+Two causes. First, the gap the issue names: each table's `schema.human.yml` has only two `subcomponents_sum_to_total` tests, so three of the five Part C totals are never checked. Second, the line 14 mismatch from my reproduction: the column map (`src/pudl/package_data/rus7/column_maps/balance_sheet.csv`) names line 6 `non_utility_property_asset`, with no final "s", and the transform function `_core_rus7__yearly_balance_sheet_assets` (`src/pudl/transform/rus7.py:51`) only keeps columns ending in `_assets`, so line 6 is dropped before either table is written, and has been since the first RUS 7 extraction (#4906). The `asset_type` enum already lists `non_utility_property`, so the name is the only thing wrong.
 
 **Proposed Solution**
 
@@ -270,10 +270,10 @@ After e-belfer put the typo fix in scope ("let's consider that fix to be in scop
 
 **Implementation Plan**
 
-1. Rename column 11 of the column map to `non_utility_property_assets`.
+1. Rename column 11 of the column map (`balance_sheet.csv`) to `non_utility_property_assets`.
 2. Rebuild both tables on the branch from the raw RUS 7 data, as `AGENTS.md` asks.
 3. Rerun my check script; any line 14 gaps left set its `error_if`.
-4. Add the three tests to both `schema.human.yml` files, using the Part C formulas.
+4. Add three `subcomponents_sum_to_total` tests to both `schema.human.yml` files, using the Part C formulas.
 5. Regenerate the schemas and expected row counts with `dbt_helper update-tables`.
 6. Validate both tables: all 8 tests should pass.
 7. Add release notes with the issue and PR numbers.

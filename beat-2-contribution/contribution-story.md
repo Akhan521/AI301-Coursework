@@ -382,16 +382,25 @@ Austen approved #5729, and it merged that afternoon through auto-merge. She said
 
 **Technical Skills Gained**
 
-[What you learned technically, named concretely.]
+- Writing dbt data tests on a production pipeline: PUDL's `subcomponents_sum_to_total` tests live in human-edited schema files that `dbt_helper` regenerates, and `error_if` is an allowance for known failures, not a tolerance.
+- Checking a pipeline's output before changing it: a read-only DuckDB query over PUDL's nightly Parquet files found the line 6 bug, and a column-by-column comparison after the rebuild showed the fix only added rows.
+- Tracing a missing value back through a pipeline, from a total that didn't add up, to a transform that only keeps columns ending in `_assets`, to one header cell in a column map.
+- Rebuilding part of a Dagster pipeline with `dg launch` inside a pixi environment, including why assets built in the same step have to be selected together.
+- Building my own tools with Claude Code: skills graded against gold-labeled evals, hooks that check my posts and PRs before they go out, and a headless runner. I also learned to measure a repo's review rhythm from its own PR history with `gh`.
 
 **Challenges Overcome**
 
-[What was hard and how you solved it; point at the real events, the
-Toolkit blocks above are full of them.]
+- Finding an issue I could finish: none of my Unit 5 picks survived Unit 6, so I screened all 2,517 AI/ML and Python issues on the Issue Selection site with my rubric's rules and had the scout grade the best two dozen. That's how I found #5566.
+- A bug hiding inside a testing task: the issue only asked for tests, but checking all three totals myself before writing any showed line 14 missing for 1,782 borrower-years. I traced it to the column-map typo and put the choice to the maintainers in my plan: fix it here, or test around it and report it separately. They put the fix in scope.
+- A review asking for tests that already existed: instead of adding duplicates, I showed Austen where they were and asked whether to remove their unused allowances, which turned the round into a cleanup she agreed to.
+- My own tools blocking a correct PR: the gate failed on both PRs because my local `main` was behind, and once because my rubric required an issue that PUDL doesn't. Each time I fixed the cause (fast-forwarding `main`, or changing the check and rerunning its eval) instead of rerunning until it passed.
 
 **What I'd Do Differently Next Time**
 
-[Reflection on your process.]
+- Read the code before trusting a grade. My scout accepted opensearch-benchmark#714, and only reading the code showed the fix was a port across two repos. On PUDL, reading the blank forms instead of the `is_total` flag is what found two of the three totals.
+- Test a new rule against a case it wasn't written for. Twice my own rules were fitted to the case in front of me: my Unit 4 rubric carried Path Review's "always name an issue" into PUDL, and my first playbook draft only fit my one quiet PR. Next time I'd try each rule on a second repo or thread before relying on it.
+- Make "is my `main` current?" the first step of every session, not something a failed gate tells me.
+- Rerun every number on the final commit as I go. A few of my evidence numbers first came from older notes, and I had to rerun them before they went in the PR.
 
 ---
 

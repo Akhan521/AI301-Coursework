@@ -340,6 +340,10 @@ Austen Sharpe (aesharpe) asked me to add tests for `total_utility_plant` and `to
 
 Austen approved #5729, and it merged that afternoon through auto-merge. She said the RUS 12 typo could go straight to a PR with no issue, so I branched from `main` and fixed RUS 12's column map and its `asset_type` value, which held the same misspelling. Rebuilt on the branch, line 6 went from 0 rows to 779 and line 14's gaps from 212 of 775 to 0, and each of those gaps equaled the restored line 6 value. Two things needed care: `dbt_helper` also re-sorted an unrelated row-count line, which I reverted, and `pyrefly-check` failed on `main` itself because of another PR, so I moved it to my manifest's excluded table with the reason. After #5729 merged, I rebased onto it, fixed the rubric check the gate exposed, and opened #5737.
 
+**2026-11-02 (keeping #5737 current)**
+
+#5737 had no reviews yet, and GitHub showed a release-notes conflict: #5693, #5731 and #5735 had all edited the same section since my branch was made. I merged `main`, kept my RUS 12 entry after the RUS 7 one, took `main`'s reworded territory entry, and CI passed on the merge. That evening I ran my PR-monitor on it for the first time, and with 3 quiet days against my 14-day threshold it drafted a wait note, so I posted nothing.
+
 **Toolkit**
 
 - Tool: Claude Code in my PUDL clone with `CLAUDE.local.md`, running PUDL's own tools (`pudl_datastore`, `dg launch`, `dbt_helper`). I approved each commit message before anything was committed.

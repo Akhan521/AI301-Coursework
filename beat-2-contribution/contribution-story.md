@@ -303,7 +303,7 @@ Four checks, each run before the fix (PUDL's 2026-10-24 nightly data) and after 
 3. **The fix only adds rows.** Compared column by column with the nightly data, each table gains 8,483 line 6 rows, and none of the existing 237,524 rows changes. The 8 negative line 6 values match the 8 gaps that went the other way.
 4. **PUDL's own checks**, from `AGENTS.md`'s PR checklist: `prek-run`, `pytest-unit` (1,307 passed), `pytest-integration` (791 passed), `pyrefly-check` (0 errors), and `docs-check`. All passed through the ship-gate.
 
-The full output is in the PR. Not run yet: `pytest-ci`, the 45-60 minute fast ETL, which the PR template asks for "when you think the PR is done", so I'll run it before marking the draft ready.
+The full output is in the PR. Before marking it ready I also ran `pytest-ci`, the fast ETL the PR template asks for "when you think the PR is done": it passed on the final commit (`568bebf72`), with 764 pipeline tests passing and dbt at `PASS=1949 ERROR=0`.
 
 **Toolkit**
 

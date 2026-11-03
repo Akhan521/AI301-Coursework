@@ -367,7 +367,7 @@ Austen approved #5729, and it merged that afternoon through auto-merge. She said
 - 2026-10-30: she replied, "you can just make a PR for it! No issue needed," and turned on auto-merge. #5729 merged that afternoon.
 - 2026-10-30: I opened the RUS 12 follow-up as https://github.com/catalyst-cooperative/pudl/pull/5737, ready for review.
 
-**Status:** Merged on 2026-10-30, through Austen's auto-merge once CI passed. The RUS 12 follow-up, #5737, is open and awaiting review.
+**Status:** Merged on 2026-10-30, through Austen's auto-merge once CI passed. The RUS 12 follow-up, #5737, is open and waiting for its first review: Zane Selvans (zaneselvans) labeled it that evening, and on 2026-11-02 I merged `main` into it to clear a release-notes conflict, with CI still passing. My playbook's threshold for PUDL is 14 days without a response, so I won't nudge before 2026-11-13.
 
 **Toolkit**
 

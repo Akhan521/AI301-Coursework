@@ -406,10 +406,21 @@ Austen approved #5729, and it merged that afternoon through auto-merge. She said
 
 ## Resources Used
 
-[What actually helped, not a reading list. List things this story
-already shows you using: the doc you followed to set the environment
-up, the thread that explained the bug, the person who answered you.
-One real entry beats ten plausible ones.]
+**PUDL's own docs**
 
-- [Link to documentation that helped]
-- [Discussion, issue, or post that helped]
+- [`AGENTS.md`](https://github.com/catalyst-cooperative/pudl/blob/main/AGENTS.md): the PR checklist my ship manifest runs, and the rule that validation is only reliable on tables rebuilt on my branch.
+- [Development setup](https://github.com/catalyst-cooperative/pudl/blob/main/docs/dev/dev_setup.rst): the pixi environment, and keeping `PUDL_INPUT` and `PUDL_OUTPUT` outside the repo.
+- [PR template](https://github.com/catalyst-cooperative/pudl/blob/main/.github/pull_request_template.md): the structure of both PR descriptions, and when to run `pytest-ci` ("when you think the PR is done").
+- [Blank RUS Form 7s](https://github.com/catalyst-cooperative/pudl/tree/main/docs/data_sources/rus7): the Part C formulas for the three missing totals, which the `is_total` flag would have missed.
+- [Managing external contributions](https://github.com/catalyst-cooperative/pudl/blob/main/docs/dev/managing_external_contributions.rst): the response times behind my playbook's 14-day threshold.
+- [PUDL nightly Parquet files](https://s3.us-west-2.amazonaws.com/pudl.catalyst.coop/nightly/core_rus7__yearly_balance_sheet_assets.parquet): let me reproduce and check the totals before the fix without running the ETL.
+
+**Threads and people**
+
+- [#5154](https://github.com/catalyst-cooperative/pudl/issues/5154), the umbrella issue: its finished sibling issues showed how long outside PRs here took to merge.
+- E. Belfer (e-belfer), who assigned me #5566 and [put the typo fix in scope](https://github.com/catalyst-cooperative/pudl/issues/5566#issuecomment-6443074247).
+- Austen Sharpe (aesharpe), who reviewed #5729, [agreed to drop the unused `error_if` allowances](https://github.com/catalyst-cooperative/pudl/pull/5729#issuecomment-6501027360), approved and merged it, and [said the RUS 12 fix needed no issue](https://github.com/catalyst-cooperative/pudl/pull/5729#issuecomment-6533169416).
+
+**Tools**
+
+- Claude Code, which I talked the plan through with, and which wrote the check script, made the edits, and ran the rebuilds and validations. I reviewed the diff and reran the before/after numbers myself. It also ran my course toolkit (scout, voice guard, ship-gate, PR-monitor), described in the Toolkit blocks above.

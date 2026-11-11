@@ -97,6 +97,30 @@ I've made this hook mine because, for example, I never date the fix or the PR in
 - After, installed guide (2026-10-26): "A plan comment carries the plan in short form: the cause, the change and where it goes, how I'll check it, and the one decision I'd like a maintainer's view on, if there is one. If the repo asks for a plan in a particular shape (for example, steps with their outputs), I use that shape. Anything that serves none of these, such as my full reasoning or the evidence itself, belongs in the plan or the PR."
 - Canary under the new rule, guard-log 2026-10-26 21:07: "stop: rule broken: "Anything that serves none of these, such as my full reasoning or the evidence itself, belongs in the plan or the PR.""
 
+**pr-precheck + ship-gate**
+
+**What it is, and the judgment hole I wrote:** The pr-precheck is a skill that grades a PR package (meaning my branch's diff, its title, and description) against my plan and the issue itself, and it gives an accept or reject status. Back in Unit 4, I wrote the SKILL.md file, a rubric of 8 required and 2 preferred checks, an evidence guide, a procedure, and a voice guide rule. The ship-gate is the pr-precheck skill's second half. It's a hook that runs on the `gh pr create` command. Before a PR can open, it runs every check in my manifest. It then runs the pr-precheck on the branch, and if anything fails, the PR doesn't open. Every run is also logged in a log Markdown file (`gate-log.md`).
+
+- Manifest row (`ship-manifest.md`): "| Unit and integration tests | `. ~/pudl-dev/env.sh && pixi run pytest-unit && pixi run pytest-integration` | AGENTS.md "PR checklist"; CI runs both in .github/workflows/pytest.yml |"
+- Excluded row, dated 2026-10-30 (`ship-manifest.md`): "It runs the fast ETL (~45-60 min per docs/dev/testing.rst), past the ship-gate's 25-minute limit. The PR template asks for it "when you think the PR is done", so I run it separately before a PR is marked ready"
+- `fix-observed` (rubric): "Passes if every failure the reproduction recorded is shown re-run on the changed code, naming what was run ... and showing a specific result a reviewer can compare with the plan's expected-after"
+- Gate log, 2026-10-27 21:03: "fix-observed [pass]: The repro trigger is re-run after the fix: the script shows 0 line-14 gaps and 8,483 line-6 rows, and dbt shows PASS=8, versus FAIL 1782 before."
+
+I wrote the manifest's rows from PUDL's `AGENTS.md` PR checklist, and it lists excluded checks with a dated reason for each. My rubric ensures that a fix is actually observed.
+
+**How it evolved, dated:** Running my own rubric on real PUDL PRs allowed me to see how my rubric would fare against real PUDL PRs and issues that I'd be working on within this repository. It also allowed me to gut-check my rubric for its correctness and efficacy.
+
+- **2026-10-09** (my Unit 4 `pull-request.md`): "The first version required every item in the test plan to be shown re-run, which held pkg-05 over a new warning that an added test already pinned." (full run 1: 19/20; confirming run: 20/20)
+- **2026-10-27 and 10-30** (my Unit 7 Toolkit entry): "On both of my PRs the first run stopped because my local `main` was behind upstream, so pr-precheck saw upstream's changes mixed into mine; fast-forwarding `main` fixed that"
+- **2026-10-30** (commit `01fa5ef`): "The check required naming an issue "whatever the repo states", a Path Review house rule. PUDL asks for the closing issue only "if applicable", and its maintainer said my RUS 12 follow-up needed no issue. ... Full run 4 scores 20/20."
+
+**Evidence:**
+
+- Gate log, 2026-10-30 14:41, BLOCK: "repo-asks-met [fail]: template wants 'Closes #XXXX'; description names no issue it resolves ('No issue', cites #5729)"
+- Before (`tools/pr-precheck/rubric.md`, before commit `01fa5ef`): "Passes if each ask is met with real content or marked not applicable with a reason, and, whatever the repo states, the description names the issue it resolves."
+- After (commit `01fa5ef`, 2026-10-30): "Passes if each ask is met with real content or marked not applicable with a reason, and the description names the issue it resolves or, when there is no issue, says so and points to where a maintainer asked for or agreed to the change."
+- Gate log, 2026-10-30 15:04: "verdict: PASS (honored the manual pass at 2026-10-30 15:03)"; PR #5737 opened that minute.
+
 Copy the entry shape below once per featured tool and fill it there.
 
 **[Tool name]**

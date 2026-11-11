@@ -27,7 +27,7 @@ as a deleted answer.
 the unused `[Tool name]` entry stub, its copy-me sentence, and the prompt sentences under
 each header. A leftover bracketed prompt reads as unfilled.
 
-**Student:** [Student name]
+**Student:** Aamir Khan
 
 ## Featured Tools
 
@@ -43,7 +43,11 @@ Each tool's honest limit is not written here. It goes in the tool-limits list at
 bottom of this page, one line per featured tool, so that the limits sit together and can be
 read as a set.
 
-[Why these tools, in your own words.]
+issue-scout was one of the three tools that I've selected because it was essentially the best skill that I had that allowed me to find an issue worth working on that fit my profile. Not only that, but I was able to tweak it such that it could lean in on my interests as well as the type of work that I'm looking forward to doing in the future. I also had a lot of friction with the skill, as in it kept getting things wrong initially (scan 1 on 2026-10-16 accepted 1 of its top 5, and the other 4 already had open PRs; it also accepted codex-lb#1467 while someone was fixing it on a fork), and so I feel like it grew a lot out of all of the improvements and refinements I made (scan 2 accepted 5 of 5, with no PR conflicts). There were a lot of changes that I made to this issue-scout skill so that it could be more robust and useful in open-source development (it accepted pudl#5566, which became my merged PR #5729).
+
+voice-guard was one of the three that I chose because, essentially, every post that I made on the PUDL repository went through it (the claim on #5566, my plan, my plan change, four replies on #5729, both PR openings, and my thank-you on #5737, from 2026-10-23 to 2026-11-09) to make sure that every piece of work that I contributed was in line with the way I would communicate naturally (on 2026-10-24 and 10-26 its plan-comment rule stopped my plan draft again and again until I rewrote the rule). It was also what enabled me to very conveniently and smoothly interact with maintainers (a day after my plan posted, the maintainer replied: "That plan sounds reasonable to me.").
+
+The pr-precheck + ship-gate skill was one of the three that I chose because it essentially was what allowed me to make sure that, any time I was trying to make a PR, I was keeping my local main up to date with upstream (on 2026-10-27 and 10-30 its first run blocked because my local main was behind upstream, so upstream's changes showed up mixed into my diff). Initially, my rubric had a rule that was forcing me to name an issue in the PR description (even though sometimes maintainers, like in my example, did not want a specific issue for a follow-up; I changed my repo-asks-met check on 2026-10-30, commit 01fa5ef, and my Unit 4 eval still scored 20/20). It was also what allowed me to make sure that all of my PRs were in line with what maintainers were expecting on this repository (my manifest ran the checks in PUDL's AGENTS.md PR checklist before every PR). Both of my PRs that I made passed the gate, and eventually both were merged in (#5729 on 2026-10-30 and #5737 on 2026-11-09).
 
 Copy the entry shape below once per featured tool and fill it there.
 

@@ -166,16 +166,22 @@ actually happened afterwards. A beat about something that did not work counts fu
 beat, and when the work happened never moves this score.
 
 **Beat 1**
-Date: [a date, or a month and year]
-Friction: [what was going wrong, and how you noticed]
-Change: [what you changed because of it]
-Result: [what happened afterwards, or the word none]
+Date: 2026-10-16
+Friction: "A dry run of "llm" and "agent" with `good first issue` mostly returned tiny personal repos (one account had 24 of 200 results), and search results carry no star count that ranking could use to screen them out." (scan-notes)
+Change: "Switched the queries from keywords to org lists." ... "Split the queries into project families (eval/observability, agent/LLM-app, wider ML) and ran each once per label." (scan-notes)
+Result: "the 6 queries returned 434 unique issues. 313 had no assignee, 229 of those were updated in the last 60 days, 224 passed the title filter and 138 had 5 comments or fewer." (scan 1, scan-output.md)
 
 **Beat 2**
-Date: [a date, or a month and year]
-Friction: [what was going wrong, and how you noticed]
-Change: [what you changed because of it]
-Result: [what happened afterwards, or the word none]
+Date: 2026-10-16
+Friction: "1 accept (docling-project/docling-pipelines#306) and 4 rejects, all on `not-claimed` ... Ranking can't see PRs, and "fewest comments first" favours the freshest issues, which are exactly the ones drive-by PRs reach within hours." (scan-notes)
+Change: "Added `-- -linked:pr` to all six queries" ... "Added a `bug`-label query to every family" ... "Replaced "fewest comments first" with age bands from `createdAt`" ... "`not-claimed` now also fails on a commit referencing the issue that someone other than a maintainer pushed in the last 30 days, including on a fork" (scan-notes)
+Result: "Regression: full Unit 1 eval 20/20, every category matched." ... "Scan 1 accepted 1 of 5 and lost 4 to open PRs; scan 2 accepted 5 of 5, every one a `bug` in the 30–365-day band with 0–1 comments, so the PR races are gone." (scan-notes)
+
+**Beat 3**
+Date: 2026-10-16
+Friction: "But each accept had a blocker the rubric can't see: inspect_evals#2370 and #2388 sit behind a contributor gate ... vllm#48689 needs 8 Blackwell GPUs ... phoenix#13002 is stuck waiting on its reporter." (scan-notes)
+Change: "Candidate fixes, not yet made: drop `stale`/`needs information`/`needs repro` labels in ranking ...; add NVFP4/FP8/Blackwell to the title rule; consider rubric checks for contributor gates, open prerequisites ..., and fixes that live outside the repo." (scan-notes)
+Result: none
 
 Copy the beat shape above for as many beats as your term had.
 

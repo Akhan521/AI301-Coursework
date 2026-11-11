@@ -49,6 +49,31 @@ voice-guard was one of the three that I chose because, essentially, every post t
 
 The pr-precheck + ship-gate skill was one of the three that I chose because it essentially was what allowed me to make sure that, any time I was trying to make a PR, I was keeping my local main up to date with upstream (on 2026-10-27 and 10-30 its first run blocked because my local main was behind upstream, so upstream's changes showed up mixed into my diff). Initially, my rubric had a rule that was forcing me to name an issue in the PR description (even though sometimes maintainers, like in my example, did not want a specific issue for a follow-up; I changed my repo-asks-met check on 2026-10-30, commit 01fa5ef, and my Unit 4 eval still scored 20/20). It was also what allowed me to make sure that all of my PRs were in line with what maintainers were expecting on this repository (my manifest ran the checks in PUDL's AGENTS.md PR checklist before every PR). Both of my PRs that I made passed the gate, and eventually both were merged in (#5729 on 2026-10-30 and #5737 on 2026-11-09).
 
+**issue-scout**
+
+**What it is, and the judgment hole I wrote:** The issue-scout skill searches through GitHub with my queries. It ranks results with filters that I've defined for free. It then grades the top five choices against my rubric. I'm specifically using 15 queries as my search strategy, made up of 5 families of organizations, such as evals and observability, agent LLM apps, wider machine learning, data Python infrastructure, and midsize LLM tooling. I'm also running these queries against labels such as "good first issue", "help wanted", or "bug". My rubric consists of 13 checks, 10 of which are required and 3 preferred.
+
+- `not-claimed` (rubric): fails on "a commit referencing the issue pushed within the last 30 days by someone other than a maintainer, including on a fork, which shows work in progress even when nothing was posted on the thread"
+- `scope-feasible` (rubric): "It fails only when there is no single piece of work in it: a codebase-wide checklist, an "improve X everywhere", or a container issue tracking many sub-tasks."
+- Ranking filter 5 (search strategy): "first issues opened 30 to 365 days before the scan date, then issues under 30 days old, then issues over a year old."
+- Search strategy: "`-- -linked:pr` drops issues that already have a pull request linked in GitHub's Development sidebar"
+
+Initially, the scout accepted an issue and I recommended claiming it (codex-lb#1467, on 2026-10-16). However, someone had already pushed a fork commit naming the issue previously (gcs8 pushed it on 2026-10-15, the day before). My rule initially was looking only at assignees, linked PRs, and claim comments, so it couldn't see when an individual was pushing work without mentioning anything on the thread (I added the fork-commit clause that same day; my full Unit 1 eval still scored 20/20, and on the site screen the new rule caught 13 issues).
+
+**How it evolved, dated:** What I realized is that most of my changes came from one day of real scans. It made me realize that sometimes you can uncover problems just from actually going through the process yourself instead of having to rely on evals. Evals can only help you so much, but actually doing the dirty work of running scans and going through the work yourself is what allows you to uncover problems that you would really face.
+
+- **2026-09-23** (commit `a70493c`): "the single bounded-scope check carried too many independent failure modes ... which made it hard to revise one concern without risking a regression elsewhere (issue-01 regressed this way during Unit 1 iteration). Splits it into single-bounded-goal, no-unresolved-debate, not-core-internals, not-support-question, no-abandoned-history, and feature-request-confirmed. Re-confirmed 20/20 agreement"
+- **2026-10-16** (scan-notes): "Switched the queries from keywords to org lists. A dry run of "llm" and "agent" with `good first issue` mostly returned tiny personal repos (one account had 24 of 200 results)"
+- **2026-10-16** (scan-notes): "1 accept (docling-project/docling-pipelines#306) and 4 rejects, all on `not-claimed` ... Added `-- -linked:pr` to all six queries ... Tested before and after: it drops sktime#11495, openinference#3785 and rai-toolkit#108, and keeps docling#306."
+- **2026-10-16** (scan-notes): "Added a `bug`-label query to every family. Scan 1 showed fresh newcomer-labelled issues get raced within hours, while confirmed bugs without that label draw fewer drive-by PRs ... Replaced "fewest comments first" with age bands from `createdAt`"
+- **2026-10-23** (scan-notes): "Replaced `single-bounded-goal` with the staff `scope-feasible` row, and added a difficulty note ... an open design edge, an "etc.", or several files raise the difficulty note instead of rejecting. ... agreed 7/7 with gold."
+
+**Evidence:**
+
+- Before, `not-core-internals` in my Unit 1 rubric (`tools/issue-select/rubric.md`): "Fails if a maintainer states the fix touches core internals. Otherwise passes."
+- After, 2026-10-16 (installed rubric): "Fails if a maintainer says, in any wording, that the change reaches into the project's core internals or into a security- or trust-critical subsystem (authentication, token or credential verification, permissions, cryptography)."
+- The catch, scan-notes 2026-10-16: "Rejected codex-lb#1572 on the widened `not-core-internals` (the owner put the change in the crypto key-resolution layer); that's the patch working on a real issue."
+
 Copy the entry shape below once per featured tool and fill it there.
 
 **[Tool name]**

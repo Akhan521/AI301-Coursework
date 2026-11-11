@@ -74,6 +74,29 @@ Initially, the scout accepted an issue and I recommended claiming it (codex-lb#1
 - After, 2026-10-16 (installed rubric): "Fails if a maintainer says, in any wording, that the change reaches into the project's core internals or into a security- or trust-critical subsystem (authentication, token or credential verification, permissions, cryptography)."
 - The catch, scan-notes 2026-10-16: "Rejected codex-lb#1572 on the widened `not-core-internals` (the owner put the change in the crypto key-resolution layer); that's the patch working on a real issue."
 
+**voice-guard**
+
+**What it is, and the judgment hole I wrote:** Our voice-guard is a hook on Claude Code's Bash tool. Essentially, before any GitHub command like `gh issue comment`, `gh pr comment`, or `gh pr create` goes out, it reads the body file and checks it against my voice guide. If the body breaks a rule, the post is stopped, and the broken rule is quoted. Moreover, every check is logged in a log file (`guard-log.md`). My voice guide is essentially the guide that my three earlier skills also use. It covers who I am, along with some rules about how I communicate when it comes to development, as well as a section on the things I never tend to post. It also contains more information, such as how I handle claims, questions, and pings.
+
+- Claims (voice guide): "A claim says when I'll be back in the thread with the result of my first step, either tied to finishing that step or on a short timescale I control and can keep. It never dates the fix or the PR"
+- Wrong/Right pair (voice guide): "Wrong: "I'll take this and have a PR up by Friday."" / "Right: "I'd like to work on this. I'll reproduce it on current `main` first and post what I find here once I have the output.""
+- Pings (voice guide): "I wait at least that long, and never less than a week. A ping adds something: the branch brought up to date, a new result, or a narrower question."
+- Things I never post (voice guide): "Commands or output I didn't run myself, or any text I haven't read and checked line by line before posting, AI-assisted or not."
+
+I've made this hook mine because, for example, I never date the fix or the PR in my communication with the maintainer. I essentially align with the plan that I'll be proposing, and I don't set deadlines so that it doesn't set any strong expectations for maintainers of specific deadlines.
+
+**How it evolved, dated:** The guide's changes taught me that oftentimes you can get a decent hook or skill out of the gate, but what really makes it yours is aligning on the rules that define your own voice and the way you actually work. Otherwise, it can come off as very generic and robotic.
+
+- **2026-10-23** (my Unit 6 Toolkit entry): "repro-check kept saying it couldn't find my voice guide, because Claude Code's Glob tool doesn't see the symlinks the install creates, so I replaced them with the install guide's one-line pointer files."
+- **2026-10-23 to 10-24** (my Unit 6 Toolkit entry): "my new rule asking for a report-back time like "this week" clashed with my Unit 2 rubric, which failed that phrase as a deadline in one run and passed it in another, so I reworded the rule to allow a report-back point tied to finishing my first step." (rubric side: commit `790c9c3`, "Run 5 scores 20/20.")
+- **2026-10-24 to 10-26** (guard-log): 8 stops quoting "A plan comment is the plan in short form, a few lines at most", from 2026-10-24 19:07 to 10-26 20:54; then "2026-10-26 21:12 [hook] pass | target: gh issue comment https://github.com/catalyst-cooperative/pudl/issues/5566 --body-file"
+
+**Evidence:**
+
+- Before, commit `a86f6ad` (2026-10-03), still in `tools/pr-precheck/voice-guide.md`: "A plan comment is the plan in short form, a few lines at most: the cause in one line, the change and where it goes, how I'll check it, and the one decision I'd like a maintainer's view on, if there is one."
+- After, installed guide (2026-10-26): "A plan comment carries the plan in short form: the cause, the change and where it goes, how I'll check it, and the one decision I'd like a maintainer's view on, if there is one. If the repo asks for a plan in a particular shape (for example, steps with their outputs), I use that shape. Anything that serves none of these, such as my full reasoning or the evidence itself, belongs in the plan or the PR."
+- Canary under the new rule, guard-log 2026-10-26 21:07: "stop: rule broken: "Anything that serves none of these, such as my full reasoning or the evidence itself, belongs in the plan or the PR.""
+
 Copy the entry shape below once per featured tool and fill it there.
 
 **[Tool name]**

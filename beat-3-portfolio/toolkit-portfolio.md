@@ -145,7 +145,9 @@ pasted transcript.]
 One line each for the rest of the toolkit: what it is and where it
 stands (one bullet per tool; a compact sentence or two is fine).
 
-- [Tool name: one line.]
+- My repro-check skill grades a claim comment plus a repro report against the issue, and it says whether they're ready to post (last changed 2026-10-24, commit `790c9c3`, eval 20/20; it accepted my #5566 repro report).
+- My plan-check skill grades a plan plus a plan comment against the issue and repro evidence, and it says whether they're ready to post and build from (no rubric change since 2026-10-04, commit `e7557b3`; it accepted my #5566 plan with 9/9 required and 2/2 preferred checks).
+- My pr-monitor skill is a headless runner that reads a PR's live state with read-only GitHub calls and drafts my next move from my playbook, and it posts nothing (one run on #5737 on 2026-11-02 drafted a wait note; #5737 merged on 2026-11-09, before my 14-day threshold, so the nudge path never ran live).
 
 ## The Arc
 

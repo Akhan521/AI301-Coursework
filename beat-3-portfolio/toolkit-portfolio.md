@@ -219,6 +219,18 @@ Friction: "repo-asks-met [fail]: template wants 'Closes #XXXX'; description name
 Change: "On #5737 the gate also failed `repo-asks-met` for naming no issue, which PUDL doesn't require, so I changed that check and reran my Unit 4 eval (20/20)." (Pull Request Toolkit block)
 Result: "verdict: PASS (honored the manual pass at 2026-10-30 15:03)" (gate-log, 2026-10-30 15:04) ... "2026-11-09: Austen approved #5737 ("This looks great, thanks @Akhan521"), merged it through the merge queue" (Pull Request section)
 
+**Beat 10**
+Date: 2026-11-02
+Friction: "they showed it was fitted to my one quiet PR: it had no rule for a maintainer speaking last, a stale label, or a review that grows the scope, and sampling only merged PRs had hidden a 35-day wait" (Unit 8 Toolkit entry)
+Change: "so I rewrote it as general rules plus one dated line per repo" (Unit 8 Toolkit entry) ... "catalyst-cooperative/pudl (measured 2026-11-02): 14 days." (playbook)
+Result: "On #5737 it read 3 quiet days, no reviews and passing checks, and drafted a wait note instead of a nudge, since my threshold isn't met until 2026-11-13, so I posted nothing." (Unit 8 Toolkit entry)
+
+**Beat 11**
+Date: 2026-11-02
+Friction: "the monitor never counts time passing as a change, so a PR that crossed my threshold with nothing else new would get "nothing new" instead of a nudge" (Unit 8 Toolkit entry)
+Change: "I patched my installed copy to count whole weeks of quiet" (Unit 8 Toolkit entry) ... `+        playbook_fingerprint(), quiet_weeks(pr),` (monitor.py diff)
+Result: none ("it was approved before my playbook's 14-day threshold for a nudge came up." Pull Request section, Status)
+
 Copy the beat shape above for as many beats as your term had.
 
 ## Limitations and What's Next

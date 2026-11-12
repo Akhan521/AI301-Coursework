@@ -35,4 +35,19 @@ For my first plan comment, the line 14 test mentioned that we should warn at 1,7
 
 I ended up fixing the column map in the same PR. I included a mention about how, with the column fix, line 6 comes through with all 8,483 rows per table and all 1,782 line 14 gaps closed, including the 8 where the reported total was lower, which were negative line 6 values (so I dropped the planned `error_if`).
 
+On October 27, I renamed the column map cell on a branch from `upstream/main`, and I rebuilt the tables. My first `dg launch` failed with a `DagsterInvalidSubsetError` because `core_rus7__entity_borrowers` is built in the same step as a forensics asset, so I added that asset to the selection. I then added three tests, regenerated the schemas and row counts, wrote two release notes, and committed in two steps: the fix and then the tests.
+
+```
+Before (nightly data):
+1 of 8 FAIL 16 source_check_row_counts_per_partition_pudl_core_rus7__yearly_balance_sheet_assets_...
+7 of 8 FAIL 1782 source_subcomponents_sum_to_total_pudl_core_rus7__yearly_balance_sheet_assets_...total_other_property_and_investm...
+Done. PASS=6 WARN=0 ERROR=2 SKIP=0 NO-OP=0 REUSED=0 TOTAL=8
+
+After (rebuilt tables):
+7 of 8 PASS source_subcomponents_sum_to_total_pudl_core_rus7__yearly_balance_sheet_assets_...total_other_property_and_in...
+Done. PASS=8 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=8
+```
+
+I then ran repo checks (`prek-run`, `pytest-unit` 1,307 passed, `pytest-integration` 791 passed), which all passed before I opened the PR. I then opened my draft PR.
+
 ## Limitations and what's next

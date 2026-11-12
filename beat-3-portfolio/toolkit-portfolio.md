@@ -183,6 +183,24 @@ Friction: "But each accept had a blocker the rubric can't see: inspect_evals#237
 Change: "Candidate fixes, not yet made: drop `stale`/`needs information`/`needs repro` labels in ranking ...; add NVFP4/FP8/Blackwell to the title rule; consider rubric checks for contributor gates, open prerequisites ..., and fixes that live outside the repo." (scan-notes)
 Result: none
 
+**Beat 4**
+Date: 2026-10-23
+Friction: "repro-check kept saying it couldn't find my voice guide, because Claude Code's Glob tool doesn't see the symlinks the install creates" (Unit 6 Toolkit entry)
+Change: "so I replaced them with the install guide's one-line pointer files" ... "moved the guide to one home that the voice guard and my three earlier skills all read" (Unit 6 Toolkit entry)
+Result: "for the report, a reject on the first draft and an accept on the final one, with all 9 required checks and both preferred checks passing" (Reproduction Process Toolkit block)
+
+**Beat 5**
+Date: 2026-10-23 to 10-24
+Friction: "my new rule asking for a report-back time like "this week" clashed with my Unit 2 rubric, which failed that phrase as a deadline in one run and passed it in another" (Unit 6 Toolkit entry)
+Change: "claim-promises-honestly no longer counts a rough report-back time for my own next step as a deadline; only a fix or PR date is." (commit `790c9c3`) ... "and reworded my voice rule to match" (Reproduction Process Toolkit block)
+Result: "2026-10-23 23:27 [hook] pass | target: gh issue comment https://github.com/catalyst-cooperative/pudl/issues/5566 --body-file" (guard-log) ... "Run 5 scores 20/20." (commit `790c9c3`)
+
+**Beat 6**
+Date: 2026-10-24 to 10-27
+Friction: 8 stops quoting "A plan comment is the plan in short form, a few lines at most", from 2026-10-24 19:07 to 10-26 20:54 (guard-log)
+Change: "A plan comment carries the plan in short form: the cause, the change and where it goes, how I'll check it, and the one decision I'd like a maintainer's view on, if there is one." (voice guide, 2026-10-26)
+Result: "Posted my plan on the issue through the voice guard" (Implementation Notes, 2026-10-26) ... "Good catch - let's consider that fix to be in scope of this PR. That plan sounds reasonable to me." (e-belfer, pudl#5566, 2026-10-27)
+
 Copy the beat shape above for as many beats as your term had.
 
 ## Limitations and What's Next

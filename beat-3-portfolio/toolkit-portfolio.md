@@ -201,6 +201,24 @@ Friction: 8 stops quoting "A plan comment is the plan in short form, a few lines
 Change: "A plan comment carries the plan in short form: the cause, the change and where it goes, how I'll check it, and the one decision I'd like a maintainer's view on, if there is one." (voice guide, 2026-10-26)
 Result: "Posted my plan on the issue through the voice guard" (Implementation Notes, 2026-10-26) ... "Good catch - let's consider that fix to be in scope of this PR. That plan sounds reasonable to me." (e-belfer, pudl#5566, 2026-10-27)
 
+**Beat 7**
+Date: 2026-10-27
+Friction: "every row needed my `env.sh` loaded, because the gate runs each row in a fresh shell." (Testing Strategy Toolkit block)
+Change: "My manifest runs the four checks in PUDL's `AGENTS.md` PR checklist, each loading my `env.sh`" (Unit 7 Toolkit entry)
+Result: "Pre-commit hooks on all files: `. ~/pudl-dev/env.sh && pixi run prek-run` -> ok (9s)" ... "Unit and integration tests: `. ~/pudl-dev/env.sh && pixi run pytest-unit && pixi run pytest-integration` -> ok (116s)" (gate-log, 2026-10-27 20:49)
+
+**Beat 8**
+Date: 2026-10-27
+Friction: "diff-clean [unclear]: git diff main...HEAD ran against a stale main (85 files, 6 upstream commits)" (gate-log, 2026-10-27 20:49)
+Change: "The first gate run rejected because my local `main` was six commits behind upstream; after I fast-forwarded it, the gate passed." (Implementation Notes, 2026-10-27)
+Result: "verdict: PASS (honored the manual pass at 2026-10-27 21:03)" (gate-log, 2026-10-27 21:11) ... "opened draft PR #5729" (Implementation Notes, 2026-10-27)
+
+**Beat 9**
+Date: 2026-10-30
+Friction: "repo-asks-met [fail]: template wants 'Closes #XXXX'; description names no issue it resolves ('No issue', cites #5729)" (gate-log, 2026-10-30 14:41)
+Change: "On #5737 the gate also failed `repo-asks-met` for naming no issue, which PUDL doesn't require, so I changed that check and reran my Unit 4 eval (20/20)." (Pull Request Toolkit block)
+Result: "verdict: PASS (honored the manual pass at 2026-10-30 15:03)" (gate-log, 2026-10-30 15:04) ... "2026-11-09: Austen approved #5737 ("This looks great, thanks @Akhan521"), merged it through the merge queue" (Pull Request section)
+
 Copy the beat shape above for as many beats as your term had.
 
 ## Limitations and What's Next

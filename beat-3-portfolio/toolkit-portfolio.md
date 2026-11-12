@@ -239,12 +239,15 @@ What the toolkit as a whole still does not do, and what you would
 build or change next. Write this section last; it will be better
 after the rest.
 
-[The honest limits, and what comes next, in your own sentences.]
+As for where the toolkit still falls short, there are a few ideas that come to mind. Specifically, all of the runs that I've been doing against the tools in my toolkit are with respect to one repository, PUDL. My tools may end up becoming overfitted to exactly what's in front of me ("Twice my own rules were fitted to the case in front of me: my Unit 4 rubric carried Path Review's "always name an issue" into PUDL, and my first playbook draft only fit my one quiet PR." contribution story, Learnings). My rubrics have eval sets, but, for example, my voice guide, playbook, and manifest were checked only by handmade canaries and one live PR thread. There are also local setup traps, like a stale local main that blocked my gate twice (2026-10-27 and 2026-10-30, gate-log). My ship-gate hook checks the folder the session started in, and the guard resolves relative `--body-file` paths from that folder too.
+
+Looking into the future, I may end up taking another issue from the #5154 epic. I've already been invited by the maintainer that I've been communicating with to continue and take on another issue ("comment back in #5154 if you want to take another one! Thanks for your help :)" Austen, on #5737, 2026-11-09). I'd like to also make my toolkit more generalizable by perhaps extending it to a second repository. I'll add a check in my gate to make sure that `main` is current itself. I'd like to also build out some of the scout fixes that I logged but never made. I'd like to potentially give my voice guide and playbook a small eval set, like my rubrics have. And just to close off this course, I'd like to sync my course repo tools with my installed copies so the newest versions are backed up.
 
 **Tool limits.** One line per featured tool, in the same order as the entries above, naming
 where that tool still stops or what it still gets wrong. A small honest limit is full credit;
 "none really" is not a limit. If a tool genuinely has none you can name, write `none` after
 its label rather than deleting the line.
 
-issue-scout: [where this tool still stops, in plain words, or the word none]
-[tool name]: [where this tool still stops, in plain words, or the word none]
+issue-scout: "inspect_evals only accepts PRs from pre-approved contributors. CONTRIBUTING.md says so, and `pr-contributor-gate.yml` auto-closes any other PR unless a maintainer has assigned its author to the linked issue. `ai-contribution-allowed` only looks at AI bans, so it misses this." (scan-output.md, scan 2, 2026-10-16)
+voice-guard: My guard check fires on four commands, all of which post something new. For example, a comment on an issue, a comment on a PR, a new issue, and a new PR. It reads the body of each one before it goes out. As for what could potentially slip past it, editing a PR description after the PR is already open (such as a `gh pr edit` command that isn't on the guard's list), and anything typed on github.com in the browser, which doesn't go through Claude Code at all. As a concrete example, on October 28 and October 29, I edited the live description of the #5729 PR that I was working on. I added the `pytest-ci` result and the review-round changes, but none of those edits appear in our guard log, so the guard never read them.
+pr-precheck + ship-gate: "the gate diffs against my local `main`, which was six commits behind upstream, so run 1 was spent on a stale base." (Pull Request Toolkit block, contribution story)

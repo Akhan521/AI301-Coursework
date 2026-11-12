@@ -68,3 +68,9 @@ My PR was marked ready for review as well as approved and merged (on October 30)
 The maintainer finally followed up by saying, "Let me know if you'd like to take on another issue." For the RUS 12 typo, they said, "you can just make a PR for it! No issue needed.", and that became my next PR (#5737), which was merged on November 9.
 
 ## Limitations and what's next
+
+I checked the fix against the nightly build and my own rebuild, but never against the raw source data. The tests only check that totals add up within $10. A wrong line value that still sums correctly would pass.
+
+What I would do differently is I would rerun every number on the final commit as I went. Some evidence numbers first came from older notes. I would check that `main` is current at the start, not after a failed run.
+
+As for what's next, I would check the restored line 6 values against the raw RUS 7 data and/or take another issue from the umbrella epic (#5154) as the maintainer invited.

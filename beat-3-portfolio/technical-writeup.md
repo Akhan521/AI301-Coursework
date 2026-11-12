@@ -50,4 +50,21 @@ Done. PASS=8 WARN=0 ERROR=0 SKIP=0 NO-OP=0 REUSED=0 TOTAL=8
 
 I then ran repo checks (`prek-run`, `pytest-unit` 1,307 passed, `pytest-integration` 791 passed), which all passed before I opened the PR. I then opened my draft PR.
 
+For my initial review by the maintainer, they expressed their thanks for posting my draft PR. They also appreciated the thorough communication that I was sharing, and they suggested adding tests for the remaining total values. However, I ended up following up with a reply saying that those totals were already tested.
+
+But an important detail is that I mentioned that they still carry their `error_if` blocks and asked if I should remove those in this PR. The maintainer mentioned that if they have zero errors, you can go ahead and remove the `error_if` statements in this PR.
+
+I then mentioned that I was done removing both `error_if` allowances and that the two tests still pass with zero failures on both tables.
+
+```diff
+                 total_label: total_current_and_accrued
+                 tolerance: 10
+-              config:
+-                error_if: ">5"
+```
+
+My PR was marked ready for review as well as approved and merged (on October 30).
+
+The maintainer finally followed up by saying, "Let me know if you'd like to take on another issue." For the RUS 12 typo, they said, "you can just make a PR for it! No issue needed.", and that became my next PR (#5737), which was merged on November 9.
+
 ## Limitations and what's next

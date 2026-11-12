@@ -1,47 +1,8 @@
 # Toolkit Portfolio
 
-Path: `beat-3-portfolio/toolkit-portfolio.md`
-
-This file is Assignment 6, and it is graded at the path above; a copy kept anywhere else in
-the repository is not read. It has been waiting here since you created the repo in unit 1;
-unit 9 is when you write it.
-
-**Only this page is read.** Your `tools/` folders and your installed skill folders are never
-opened, so every piece of evidence you want seen has to live inline here: an output excerpt,
-a before/after pair, a dated commit reference.
-
-**Write every sentence yourself.** AI may gather diffs, dates and excerpts for you; it does
-not draft entries.
-
-**Keep every section header below under its exact name** — Featured Tools, Inventory, The
-Arc, and Limitations and What's Next. Feature three or four tools, each in the entry shape
-shown below; give every other tool one inventory line.
-
-**Some lines below are labelled, and the label is how they are read.** Three places on this
-page use a `Label: your words` shape — the arc's beats, the tool-limits list, and nothing
-else. Keep those labels exactly as written, one per line, and never delete a labelled line:
-where you have nothing to put after a label, write `none` and move on. A deleted label reads
-as a deleted answer.
-
-**Before you finish**, replace every `[bracketed prompt]` with your own words, then delete
-the unused `[Tool name]` entry stub, its copy-me sentence, and the prompt sentences under
-each header. A leftover bracketed prompt reads as unfilled.
-
 **Student:** Aamir Khan
 
 ## Featured Tools
-
-Three or four tools, presented in depth. Open with a few sentences
-on why you chose these.
-
-Full credit asks the featured set to show real change: **at least two** of your featured
-entries should show a tool that visibly moved through use. An honest entry for a tool that
-barely changed — saying so, dating what did happen, and giving the reason — earns the solid
-middle tier and never fails you.
-
-Each tool's honest limit is not written here. It goes in the tool-limits list at the
-bottom of this page, one line per featured tool, so that the limits sit together and can be
-read as a set.
 
 issue-scout was one of the three tools that I've selected because it was essentially the best skill that I had that allowed me to find an issue worth working on that fit my profile. Not only that, but I was able to tweak it such that it could lean in on my interests as well as the type of work that I'm looking forward to doing in the future. I also had a lot of friction with the skill, as in it kept getting things wrong initially (scan 1 on 2026-10-16 accepted 1 of its top 5, and the other 4 already had open PRs; it also accepted codex-lb#1467 while someone was fixing it on a fork), and so I feel like it grew a lot out of all of the improvements and refinements I made (scan 2 accepted 5 of 5, with no PR conflicts). There were a lot of changes that I made to this issue-scout skill so that it could be more robust and useful in open-source development (it accepted pudl#5566, which became my merged PR #5729).
 
@@ -121,49 +82,13 @@ I wrote the manifest's rows from PUDL's `AGENTS.md` PR checklist, and it lists e
 - After (commit `01fa5ef`, 2026-10-30): "Passes if each ask is met with real content or marked not applicable with a reason, and the description names the issue it resolves or, when there is no issue, says so and points to where a maintainer asked for or agreed to the change."
 - Gate log, 2026-10-30 15:04: "verdict: PASS (honored the manual pass at 2026-10-30 15:03)"; PR #5737 opened that minute.
 
-Copy the entry shape below once per featured tool and fill it there.
-
-**[Tool name]**
-
-**What it is, and the judgment hole I wrote:** [what the tool does,
-and the part of it that is your judgment: the rubric, strategy,
-guide, manifest, or playbook you wrote.]
-
-**How it evolved, dated:** [the changes that made it yours, each
-with its date and the friction that drove it; your weekly Toolkit
-entries are the source.]
-
-**Evidence:** [show, don't claim: an output excerpt, a before/after
-pair, or a dated commit reference, inline here. Draw it from your real
-term work where you can - a catch this tool actually made, a
-before/after from your own repo or PR - which is graded separately from
-whether an artifact is present at all. A short, telling excerpt beats a
-pasted transcript.]
-
 ## Inventory
-
-One line each for the rest of the toolkit: what it is and where it
-stands (one bullet per tool; a compact sentence or two is fine).
 
 - My repro-check skill grades a claim comment plus a repro report against the issue, and it says whether they're ready to post (last changed 2026-10-24, commit `790c9c3`, eval 20/20; it accepted my #5566 repro report).
 - My plan-check skill grades a plan plus a plan comment against the issue and repro evidence, and it says whether they're ready to post and build from (no rubric change since 2026-10-04, commit `e7557b3`; it accepted my #5566 plan with 9/9 required and 2/2 preferred checks).
 - My pr-monitor skill is a headless runner that reads a PR's live state with read-only GitHub calls and drafts my next move from my playbook, and it posts nothing (one run on #5737 on 2026-11-02 drafted a wait note; #5737 merged on 2026-11-09, before my 14-day threshold, so the nudge path never ran live).
 
 ## The Arc
-
-The story of the toolkit in order: friction, change, result, dated.
-Your weekly Toolkit entries are the source; read your own record and
-tell it oldest first.
-
-Write one block per beat, in the shape below, oldest first. Keep all four labels on every
-beat, each on its own line. The `Result:` line is what the beat was for: it says what
-happened *after* the change, which is not the same sentence as the change itself. If a beat
-never reached a result, write `Result: none` — an honest beat that did not land still counts
-fully as a beat.
-
-Full credit asks for **at least two** beats whose `Result:` line names something that
-actually happened afterwards. A beat about something that did not work counts fully as a
-beat, and when the work happened never moves this score.
 
 **Beat 1**
 Date: 2026-10-16
@@ -231,22 +156,13 @@ Friction: "the monitor never counts time passing as a change, so a PR that cross
 Change: "I patched my installed copy to count whole weeks of quiet" (Unit 8 Toolkit entry) ... `+        playbook_fingerprint(), quiet_weeks(pr),` (monitor.py diff)
 Result: none ("it was approved before my playbook's 14-day threshold for a nudge came up." Pull Request section, Status)
 
-Copy the beat shape above for as many beats as your term had.
-
 ## Limitations and What's Next
-
-What the toolkit as a whole still does not do, and what you would
-build or change next. Write this section last; it will be better
-after the rest.
 
 As for where the toolkit still falls short, there are a few ideas that come to mind. Specifically, all of the runs that I've been doing against the tools in my toolkit are with respect to one repository, PUDL. My tools may end up becoming overfitted to exactly what's in front of me ("Twice my own rules were fitted to the case in front of me: my Unit 4 rubric carried Path Review's "always name an issue" into PUDL, and my first playbook draft only fit my one quiet PR." contribution story, Learnings). My rubrics have eval sets, but, for example, my voice guide, playbook, and manifest were checked only by handmade canaries and one live PR thread. There are also local setup traps, like a stale local main that blocked my gate twice (2026-10-27 and 2026-10-30, gate-log). My ship-gate hook checks the folder the session started in, and the guard resolves relative `--body-file` paths from that folder too.
 
 Looking into the future, I may end up taking another issue from the #5154 epic. I've already been invited by the maintainer that I've been communicating with to continue and take on another issue ("comment back in #5154 if you want to take another one! Thanks for your help :)" Austen, on #5737, 2026-11-09). I'd like to also make my toolkit more generalizable by perhaps extending it to a second repository. I'll add a check in my gate to make sure that `main` is current itself. I'd like to also build out some of the scout fixes that I logged but never made. I'd like to potentially give my voice guide and playbook a small eval set, like my rubrics have. And just to close off this course, I'd like to sync my course repo tools with my installed copies so the newest versions are backed up.
 
-**Tool limits.** One line per featured tool, in the same order as the entries above, naming
-where that tool still stops or what it still gets wrong. A small honest limit is full credit;
-"none really" is not a limit. If a tool genuinely has none you can name, write `none` after
-its label rather than deleting the line.
+**Tool limits.**
 
 issue-scout: "inspect_evals only accepts PRs from pre-approved contributors. CONTRIBUTING.md says so, and `pr-contributor-gate.yml` auto-closes any other PR unless a maintainer has assigned its author to the linked issue. `ai-contribution-allowed` only looks at AI bans, so it misses this." (scan-output.md, scan 2, 2026-10-16)
 voice-guard: My guard check fires on four commands, all of which post something new. For example, a comment on an issue, a comment on a PR, a new issue, and a new PR. It reads the body of each one before it goes out. As for what could potentially slip past it, editing a PR description after the PR is already open (such as a `gh pr edit` command that isn't on the guard's list), and anything typed on github.com in the browser, which doesn't go through Claude Code at all. As a concrete example, on October 28 and October 29, I edited the live description of the #5729 PR that I was working on. I added the `pytest-ci` result and the review-round changes, but none of those edits appear in our guard log, so the guard never read them.

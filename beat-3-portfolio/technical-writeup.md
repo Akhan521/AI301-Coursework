@@ -29,4 +29,10 @@ value_vars = list(df.filter(regex=r"_assets$").columns)
 +...,net_utility_plant_assets,non_utility_property_assets,investments_subsidiary_companies_assets,...
 ```
 
+For my first plan comment, the line 14 test mentioned that we should warn at 1,782 of the 8,483 borrower-years, which becomes its `error_if` clause. My question to my maintainer was: should I fix that in this PR, or keep this PR to the tests and open a separate issue? I even recommended leaning toward the second since the issue keeps fixes out of scope. The maintainer mentioned that my catch was good and that we should keep the fix in scope for this PR. They also mentioned that my plan seemed reasonable to them.
+
+> "Good catch - let's consider that fix to be in scope of this PR. That plan sounds reasonable to me." (e-belfer, #5566, 2026-10-27)
+
+I ended up fixing the column map in the same PR. I included a mention about how, with the column fix, line 6 comes through with all 8,483 rows per table and all 1,782 line 14 gaps closed, including the 8 where the reported total was lower, which were negative line 6 values (so I dropped the planned `error_if`).
+
 ## Limitations and what's next

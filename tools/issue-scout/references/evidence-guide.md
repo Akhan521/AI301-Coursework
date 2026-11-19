@@ -65,6 +65,7 @@ free. Verify both.
 | Assignee | the Assignees box in the issue's right sidebar | "this issue: assignees:" under Repo facts |
 | Linked PRs | the Development box in the issue's right sidebar lists formally linked PRs: an open one is an active claim, a closed unmerged one is an abandoned attempt. Not every PR gets formally linked; people often just mention their PR in the comments, so read the thread too, and when the sidebar and the thread disagree, believe the thread | "linked PRs:" with state per PR, plus any PRs mentioned in the Comments section |
 | Claim comments | read the thread for "I'll take this", "can I work on this", "working on this"; note the date and whether a maintainer answered | the Comments section |
+| Fork and branch commits | grey timeline events reading "<user> added a commit that referenced this issue", including from forks: someone pushing commits that name the issue is working on it even if they never commented | any commit references listed with the issue's timeline, if the bundle includes them |
 | Label freshness | the small grey event lines between comments show when each label was added; compare with how long the issue has been open | issue open date vs capture date |
 
 ## The fifth surface: are you allowed to contribute the way you work?
